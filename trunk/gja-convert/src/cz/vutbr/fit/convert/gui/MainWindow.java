@@ -12,6 +12,7 @@ import javax.swing.JScrollPane;
 public final class MainWindow extends JFrame {
 	private static final long serialVersionUID = -187450838294806957L;
 	public static ProgressBars panel=new ProgressBars();
+	public static MainMenu menu=new MainMenu();
 	public MainWindow(){
 		String temp=Config.get("MainWindowPosX");
 		Integer posX=0;
@@ -21,9 +22,9 @@ public final class MainWindow extends JFrame {
 		if (temp!=null) posY=Integer.decode(temp);
 		this.setLocation(posX, posY);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setJMenuBar(new MainMenu());
 		this.setSize(525, 500);
-		this.setTitle(Config.get("app_name"));
+		this.setTitle("coNvert");
+		this.setJMenuBar(menu);
 		Panel ogg_frame=new Panel("ogg.jpg","OGG");
 		ogg_frame.setBackground(Color.WHITE);
 		ogg_frame.setSize(this.getSize().width/2, 30);
@@ -51,6 +52,7 @@ public final class MainWindow extends JFrame {
 		this.invalidate();
 		this.repaint();
 	}
+	
 	public static void refresh(){
 		panel.actualize();
 	}
