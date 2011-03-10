@@ -6,12 +6,8 @@ import java.util.Properties;
 import java.util.prefs.*;
 
 /**
- * Třida pro získávání a ukládání konfiguračních hodnot.
- * Při startu programu je třeba zavolat metodu init().
- * Pro získání hodnoty slouží metoda get(), pro uložení set().
- * Implicitní hodnoty se načítají ze souboru defaultOutputDir.
  *
- * @author Pavel Pokorný <pajkycz@gmail.com>
+ * @author pavel
  */
 public class Config {
 
