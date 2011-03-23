@@ -19,8 +19,6 @@ public class Config {
     
     /**
      * Vytvoří defaultní konfiguraci programu.
-     * 
-     * @return Properties Defaultní hodnoty konfigurace
      */
     public static void setDefaults() { 
         
