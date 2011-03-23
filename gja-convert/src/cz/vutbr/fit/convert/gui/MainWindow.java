@@ -1,4 +1,5 @@
 package cz.vutbr.fit.convert.gui;
+
 import cz.vutbr.fit.convert.settings.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -9,10 +10,26 @@ import cz.vutbr.fit.convert.controller.*;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
+/**
+ * Main window class
+ * main window of the application
+ * coNvert project for GJA 2010/2011 - FIT VUT Brno
+ * @author xizakt00
+ */
 public final class MainWindow extends JFrame {
 	private static final long serialVersionUID = -187450838294806957L;
+        /**
+         * Panel s progress bary - ukazatel
+         */
 	public static ProgressBars panel=new ProgressBars();
+        /**
+         * Main menu - ukazatel
+         */
 	public static MainMenu menu=new MainMenu();
+        /**
+         * Konstruktor
+         * Pred praci s hlavnim oknem je treba ho zavolat
+         */
 	public MainWindow(){
 		String temp=Config.get("MainWindowPosX");
 		Integer posX=0;
@@ -35,6 +52,7 @@ public final class MainWindow extends JFrame {
 		this.add(flac_frame,BorderLayout.EAST);
 		this.setResizable(false);
 		this.addWindowListener(new WindowAdapter() {
+            @Override
 		      public void windowClosing(WindowEvent e) {
 		          Config.set("MainWindowPosX", Integer.toString(e.getWindow().getLocation().x));
 		          Config.set("MainWindowPosY", Integer.toString(e.getWindow().getLocation().y));
@@ -44,6 +62,9 @@ public final class MainWindow extends JFrame {
 		actualize();
 		setVisible(true);
 	}
+        /**
+         * Funkce aktualizuje obsah hlavniho okna
+         */
 	private void actualize(){
 		JScrollPane state=new JScrollPane(panel);
 		state.setPreferredSize(new Dimension(200, 200));
@@ -52,9 +73,11 @@ public final class MainWindow extends JFrame {
 		this.invalidate();
 		this.repaint();
 	}
-	
+        /**
+         * Funkce aktualizuje obsah panelu s progress bary okna
+         */
 	public static void refresh(){
-		panel.actualize();
+            panel.actualize();
 	}
 	
 }

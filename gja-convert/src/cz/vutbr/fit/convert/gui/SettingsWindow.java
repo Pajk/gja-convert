@@ -26,30 +26,70 @@ import javax.swing.JSpinner;
 import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerNumberModel;
-
+/**
+ * Settings window class
+ * okno s nastavenim aplikace
+ * coNvert project for GJA 2010/2011 - FIT VUT Brno
+ * @author xizakt00
+ */
 public final class SettingsWindow extends JDialog implements ActionListener {
-
     private static final long serialVersionUID = -3491161084404651198L;
+    /**
+     * Textove pole pro zadani formatu nazvu vystupniho souboru
+     */
     private JTextField ofilenameformat = new JTextField();
+    /**
+     * ComboBox pro vyber jazyka
+     */
     private JComboBox languages = new JComboBox(Lang.getSupported());
     private SpinnerNumberModel ochannelsModel = new SpinnerNumberModel(2, 2, 2, 1);
     private String[] fchannel = {"1", "2", "6"};
     private SpinnerListModel fchannelsModel = new SpinnerListModel(fchannel);
+    /**
+     * Spinner pro vyber kanalu pro ogg format
+     */
     private JSpinner ochannels = new JSpinner(ochannelsModel);
+    /**
+     * Spinner pro vyber kanalu pro flac format
+     */
     private JSpinner fchannels = new JSpinner(fchannelsModel);
     private SpinnerNumberModel osampleRateModel = new SpinnerNumberModel(44100, 12500, 44100, 100);
     private SpinnerNumberModel fsampleRateModel = new SpinnerNumberModel(44100, 12500, 44100, 100);
+    /**
+     * Spinner pro zadani sample rate pro ogg format
+     */
     private JSpinner osamplerate = new JSpinner(osampleRateModel);
+    /**
+     * Spinner pro zadani sample rate pro flac format
+     */
     private JSpinner fsamplerate = new JSpinner(fsampleRateModel);
     private SpinnerNumberModel obitRateModel = new SpinnerNumberModel(128, 32, 192, 1);
     private SpinnerNumberModel fbitRateModel = new SpinnerNumberModel(128, 32, 192, 1);
+    /**
+     * Spinner pro zadani bit rate pro ogg format
+     */
     private JSpinner obitrate = new JSpinner(obitRateModel);
+    /**
+     * Spinner pro zadani fit rate pro flac format
+     */
     private JSpinner fbitrate = new JSpinner(fbitRateModel);
     private SpinnerNumberModel maxtasksModel = new SpinnerNumberModel(5, 1, 100, 1);
+    /**
+     * Spinner pro zadani maximalniho poctu paralelne zpracovavanzch uloh
+     */
     private JSpinner maxtasks = new JSpinner(maxtasksModel);
+    /**
+     * Textove pole pro zadani vystupniho adresare
+     */
     private JTextField outputdir = new JTextField();
+    /**
+     * Potvrzovaci tlacitko
+     */
     private JButton confirm = new JButton();
 
+    /**
+     * Konstruktor - jeho zavolanim se okno s nastavenim zobrazi
+     */
     public SettingsWindow() {
         this.setTitle(Lang.get("settings"));
         languages.setSelectedIndex(Lang.getCurrentIndex());
@@ -76,7 +116,7 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         panel1.setLayout(new GridLayout(8, 2));
         panel1.add(new JLabel(Lang.get("max_threads") + ":"));
         try {
-            maxtasksModel.setValue(Config.get("MaxTasks"));
+            maxtasksModel.setValue(Integer.decode(Config.get("MaxTasks")));
         } catch (Exception e) {
         }
         ((DefaultEditor) maxtasks.getEditor()).getTextField().setEditable(false);
@@ -159,7 +199,7 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         layout.putConstraint(SpringLayout.EAST, confirm, 0, SpringLayout.EAST, contentPane);
         layout.putConstraint(SpringLayout.SOUTH, confirm, 0, SpringLayout.SOUTH, contentPane);
         this.addWindowListener(new WindowAdapter() {
-
+            @Override
             public void windowClosing(WindowEvent e) {
                 Config.set("SettingsWindowPosX", Integer.toString(e.getWindow().getLocation().x));
                 Config.set("SettingsWindowPosY", Integer.toString(e.getWindow().getLocation().y));
@@ -171,7 +211,10 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         this.setModal(true);
         setVisible(true);
     }
-
+    /**
+     * Funkce zajistujici zavolani funkce pro ulozeni nastaveni po stisku tlacitka OK
+     * @param e ActionEvent
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == confirm) {
@@ -179,10 +222,13 @@ public final class SettingsWindow extends JDialog implements ActionListener {
             this.dispose();
         }
     }
-
+    /**
+     * Funkce ulozi nastaveni - volat po stisku tlacitka OK
+     */
     private void save() {
         Lang.set(languages.getSelectedIndex());
         MainMenu.setNames();
+        MainWindow.refresh();
         Config.set("SettingsWindowPosX", Integer.toString(this.getLocation().x));
         Config.set("SettingsWindowPosY", Integer.toString(this.getLocation().y));
         Config.set("MaxTasks", maxtasksModel.getValue().toString());

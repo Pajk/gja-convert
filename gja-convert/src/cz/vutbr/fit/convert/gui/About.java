@@ -10,9 +10,17 @@ import javax.swing.JLabel;
 
 import cz.vutbr.fit.convert.settings.Config;
 
+/**
+ * About window class
+ * Jednoduche okno "O programu"
+ * coNvert project for GJA 2010/2011 - FIT VUT Brno
+ * @author xizakt00
+ */
 public final class About extends JDialog {
 	private static final long serialVersionUID = 5428214418774521988L;
-
+        /**
+         * Konstruktor - jeho zavolanim se okno zobrazi
+         */
 	public About(){
 		this.setTitle("About");
 		String temp=Config.get("AboutWindowPosX");

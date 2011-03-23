@@ -6,18 +6,48 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-
+/**
+ * TaskManager class
+ * Trida uchovavajici vsechny tasky jako list
+ * coNvert project for GJA 2010/2011 - FIT VUT Brno
+ * @author xizakt00
+ * @see Task
+ */
 public final class TaskManager {
+        /**
+         * Seznam vsech tasku
+         */
 	private static List<Task> tasks=new ArrayList<Task>();
+        /**
+         * Pocet aktualne bezicich tasku
+         */
 	private static int runningTasks=0;
+        /**
+         * Prazny konstruktor
+         */
 	public TaskManager(){
 	}
+        /**
+         * Funkce vrati seznam Tasku
+         * @see Task
+         * @return seznam tasku
+         */
 	public static List<Task> getTasks(){
 		return tasks;
 	}
+        /**
+         * Funkce vrati vsech tasku
+         * @return pocet vsech tasku
+         */
 	public static int numberTasks(){
 		return tasks.size();
 	}
+        /**
+         * Funkce prida novy task
+         * @see Task
+         * @param filename jmeno zpracovavaneho souboru
+         * @param mode typ konverze - ogg nebo flac
+         */
 	public static void addTask(String filename,String mode){
             if (filename.endsWith(".cue")){
                 String file="";
@@ -47,15 +77,15 @@ public final class TaskManager {
                         track_no_prev=track_no;
                         int index=radek.indexOf("TRACK")+6;
                         track_no=radek.substring(index, radek.indexOf("AUDIO",index)-1).trim();
-                    } else if (track_no!="" && radek.startsWith("TITLE")){
+                    } else if ((track_no == null ? "" != null : !track_no.equals("")) && radek.startsWith("TITLE")){
                         title_prev=title;
                         int index=radek.indexOf('\"')+1;
                         title=radek.substring(index, radek.indexOf('\"',index));
-                    } else if (track_no!="" && radek.startsWith("PERFORMER")){
+                    } else if ((track_no == null ? "" != null : !track_no.equals("")) && radek.startsWith("PERFORMER")){
                         performer_prev=performer;
                         int index=radek.indexOf('\"')+1;
                         performer=radek.substring(index, radek.indexOf('\"',index));
-                    } else if (track_no!="" && radek.startsWith("INDEX 01")){
+                    } else if ((track_no == null ? "" != null : !track_no.equals("")) && radek.startsWith("INDEX 01")){
                         starttime_prev=starttime;
                         int index=radek.indexOf(':');
                         starttime=Integer.parseInt(radek.substring(9, index));
@@ -65,15 +95,15 @@ public final class TaskManager {
                         starttime*=60;
                         starttime+=Integer.parseInt(radek.substring(index+1, index+3));
                         starttime/=60;
-                        if (track_no_prev!=""){
+                        if (track_no_prev == null ? "" != null : !track_no_prev.equals("")){
                             tasks.add(new Task(file,mode,starttime_prev,starttime-starttime_prev,filename(track_no_prev,performer_prev,title_prev)));
                         }
                     }
                 }
-                if (track_no!=""){
+                if (track_no == null ? "" != null : !track_no.equals("")){
                     tasks.add(new Task(file,mode,starttime,-1,filename(track_no,performer,title)));
                 }
-                }catch(Exception e){ JOptionPane.showMessageDialog(null, "Chybny format souboru "+filename,"Error",JOptionPane.ERROR_MESSAGE); }
+                }catch(Exception e){ JOptionPane.showMessageDialog(null, "Chybny format souboru "+filename,"Error",JOptionPane.ERROR_MESSAGE); } //TODO language localization
             } else if ((filename.endsWith(".flac") ||
                             filename.endsWith(".ape") ||
                             filename.endsWith(".m4a") ||
@@ -86,19 +116,35 @@ public final class TaskManager {
                             filename.endsWith(".wav") ||
                             filename.endsWith(".s3m")))
 		tasks.add(new Task(filename,mode));
-            else JOptionPane.showMessageDialog(null, "Chybny format souboru "+filename,"Error",JOptionPane.ERROR_MESSAGE);
+            else JOptionPane.showMessageDialog(null, "Chybny format souboru "+filename,"Error",JOptionPane.ERROR_MESSAGE);//TODO language localization
 	}
+        /**
+         * Funkce inkrementuje pocet aktualne bezicich tasku
+         */
 	public static void increaseRunningTasks(){
 		runningTasks++;
 	}
+        /**
+         * Funkce dekrementuje pocet aktualne bezicich tasku
+         */
 	public static void decreaseRunningTasks(){
 		runningTasks--;
 	}
+        /**
+         * Funkce vrati pocet aktualne bezicich tasku
+         * @return pocet aktualne bezicich tasku
+         */
 	public static int numberRunningTasks(){
 		return runningTasks;
 	}
-
-       private static String filename(String track_no,String performer, String title){
+        /**
+         * Funkce vrati naformatovany string vystupniho souboru pro konverzi pomoci .cue souboru
+         * @param track_no cislo skladby
+         * @param performer autor skladby
+         * @param title nazev skladby
+         * @return nazev vystupniho souboru
+         */
+        private static String filename(String track_no,String performer, String title){
            return track_no+"-"+performer+"-"+title;
-       }
+        }
 }

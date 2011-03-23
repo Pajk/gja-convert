@@ -12,15 +12,34 @@ import cz.vutbr.fit.convert.TaskManager;
 import cz.vutbr.fit.convert.gui.About;
 import cz.vutbr.fit.convert.gui.SettingsWindow;
 import cz.vutbr.fit.convert.settings.Lang;
-import java.io.File;
-import java.io.FilenameFilter;
 
+/**
+ * Main menu class
+ * Main menu aplikace
+ * coNvert project for GJA 2010/2011 - FIT VUT Brno
+ * @author xizakt00
+ */
 public final class MainMenu extends JMenuBar{
 	private static final long serialVersionUID = -6886186422189033178L;
-    private static JMenuItem toOGG=new JMenuItem();
-    private static JMenuItem toFLAC=new JMenuItem();
-    private static JMenuItem settings=new JMenuItem();
-    private static JMenuItem about=new JMenuItem();
+        /**
+         * Tlacitko pro konverzi do formatu OGG
+         */
+        private static JMenuItem toOGG=new JMenuItem();
+        /**
+         * Tlacitko pro konverzi do formatu FLAC
+         */
+        private static JMenuItem toFLAC=new JMenuItem();
+        /**
+         * Tlacitko pro zobrazeni okna s nastavenim
+         */
+        private static JMenuItem settings=new JMenuItem();
+        /**
+         * Tlacitko pro zobrazeni okna O aplikaci
+         */
+        private static JMenuItem about=new JMenuItem();
+        /**
+         * Konstruktor
+         */
 	public MainMenu(){
 		setNames();
 		toOGG.setMnemonic(KeyEvent.VK_O);
@@ -73,7 +92,9 @@ public final class MainMenu extends JMenuBar{
 		this.add(about);
 		this.setVisible(true);
 	}
-	
+	/**
+         * Funkce nastavi texty tlacitek dle jazykove lokalizace
+         */
 	public static void setNames(){
 		toOGG.setText(Lang.get("ogg_convert"));
 		toFLAC.setText(Lang.get("flac_convert"));

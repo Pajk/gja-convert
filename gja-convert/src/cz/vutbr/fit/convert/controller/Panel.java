@@ -2,13 +2,11 @@ package cz.vutbr.fit.convert.controller;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-import java.io.IOException;
 import java.util.List;
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
@@ -27,12 +25,24 @@ import cz.vutbr.fit.convert.settings.Lang;
 import java.io.File;
 import java.net.URI;
 import java.util.StringTokenizer;
-
+/**
+ * Panel class
+ * Panel naslouchajici pro drop
+ * coNvert project for GJA 2010/2011 - FIT VUT Brno
+ * @author xizakt00
+ */
 public class Panel extends JPanel implements DropTargetListener {
 
     private static final long serialVersionUID = 5420077495778750284L;
+    /**
+     * Jmeno panelu - OGG nebo FLAC
+     */
     private String panelName;
-
+    /**
+     * Konstruktor
+     * @param path jmeno souboru se zobrazovanym obrazkem
+     * @param panelNam jmeno panelu - OGG nebo FLAC
+     */
     public Panel(String path, String panelNam) {
         @SuppressWarnings("unused")
         DropTarget dt;
@@ -45,14 +55,15 @@ public class Panel extends JPanel implements DropTargetListener {
         } catch (Exception e) {
             picLabel = new JLabel(Lang.get("file") + " " + path + " " + Lang.get("not_found"));
         }
+        //TODO language localization
         picLabel.setToolTipText("Sem pretahnete soubor, ktery chcete konvertovat do souboru " + panelNam);
         dt = new DropTarget(picLabel, this);
 
         picLabel.addMouseListener(new MouseAdapter() {
-
-            @SuppressWarnings("deprecation")
+            @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
+                    //TODO language localization and file filter
                     FileDialog fd = new FileDialog(new Frame(), "Vyberte soubor pro konverzi do " + panelName, FileDialog.LOAD);
                     fd.setLocation(50, 50);
                     fd.show();
@@ -64,19 +75,36 @@ public class Panel extends JPanel implements DropTargetListener {
         });
         this.add(picLabel);
     }
-
+    /**
+     * Nedela nic
+     * @param dtde
+     */
     public void dragEnter(DropTargetDragEvent dtde) {
     }
-
+    /**
+     * Nedela nic
+     * @param dte
+     */
     public void dragExit(DropTargetEvent dte) {
     }
-
+    /**
+     * Nedela nic
+     * @param dtde
+     */
     public void dragOver(DropTargetDragEvent dtde) {
     }
-
+    /**
+     * Nedela nic
+     * @param dtde
+     */
     public void dropActionChanged(DropTargetDragEvent dtde) {
     }
-
+    /**
+     * Funkce po akci drag analyzuje prijata data a pripadne prida novou ulohu ke zpracovani
+     * Funguje pod MacOS X a Windows
+     * Linux: otestovano pod CentOS
+     * @param dtde
+     */
     @SuppressWarnings("rawtypes")
     public void drop(DropTargetDropEvent dtde) {
         try {

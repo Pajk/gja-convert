@@ -39,8 +39,8 @@ public class Lang {
     /**
      * Ziskani lokalizovaneho retezce podle klice.
      * 
-     * @param key
-     * @return
+     * @param key klic podle ktereho hledat
+     * @return hledany string
      */
     public static String get(String key) {
         return Lang.labelsBundle.getString(key);
