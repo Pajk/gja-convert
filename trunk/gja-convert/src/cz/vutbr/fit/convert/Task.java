@@ -9,38 +9,86 @@ import cz.vutbr.fit.convert.gui.MainWindow;
 import cz.vutbr.fit.convert.settings.Config;
 import cz.vutbr.fit.convert.settings.Lang;
 import it.sauronsoftware.jave.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 import javax.swing.JProgressBar;
-
+/**
+ * Task class
+ * Trida reprezentujici jednu ulohu
+ * coNvert project for GJA 2010/2011 - FIT VUT Brno
+ * @author xizakt00
+ */
 public class Task extends List implements EncoderProgressListener {
-
     private static final long serialVersionUID = 3619958613264215820L;
+    /**
+     * Priznak indikujici, ze ma dojit k orezani souboru
+     * True - dojde k orezani
+     * False - soubor se zpracuje cely
+     */
     private boolean cut;
+    /**
+     * nazev vstupniho souboru
+     */
     private String ifilename;
+    /**
+     * vystupni format souboru - ogg nebo flac
+     */
     private String oformat;
+    /**
+     * nazev vystupniho souboru
+     */
     private String ofilename;
+    /**
+     * zobrazovany progress bar
+     */
     public JProgressBar progress;
-    public float starttime;
-    public float duration;
-    public Thread running;
+    /*
+     * zacatek dekodovani souboru
+     */
+    private float starttime;
+    /**
+     * delka vysledneho souboru
+     */
+    private float duration;
+    /**
+     * zvoleny bitrate
+     */
     private int bitrate;
+    /**
+     * zvoleny sampling rate
+     */
     private int samplingrate;
+    /**
+     * zvoleny pocet kanalu
+     */
     private int channels;
-
+    /**
+     * Konstruktor - vytvori novou ulohu a spusti ji v novem vlakne
+     * @param filename cesta a nazev vstupniho souboru
+     * @param mode typ konverze - ogg nebo flac
+     */
     public Task(String filename, String mode) {
         cut=false;
         ifilename = filename;
         oformat = mode;
         progress = new JProgressBar(0, 1000);
         progress.setEnabled(true);
-        progress.setString(ifilename);
+        progress.setString(ifilename.substring(ifilename.lastIndexOf(File.separatorChar)+1));
         progress.setStringPainted(true);
         progress.setToolTipText("<html>" + Lang.get("input_file") + ": " + ifilename + "<br>" + Lang.get("convert_into") + ": " + oformat + "</html>");
         loadConfig();
         this.start();
     }
-
+    /**
+     * Konstruktor pro orezavane skladby
+     * @param filename cesta a nazev vstupniho souboru
+     * @param mode typ konverze - ogg nebo flac
+     * @param starttime1 zacatek dekodovani
+     * @param duration1 delka vystupniho souboru
+     * @param filename_new jmeno noveho souboru
+     */
     public Task(String filename, String mode, float starttime1, float duration1,String filename_new){
         starttime=starttime1;
         duration=duration1;
@@ -50,15 +98,17 @@ public class Task extends List implements EncoderProgressListener {
         oformat = mode;
         progress = new JProgressBar(0, 1000);
         progress.setEnabled(true);
-        progress.setString(ifilename);
+        progress.setString(ifilename.substring(ifilename.lastIndexOf(File.separatorChar)+1));
         progress.setStringPainted(true);
         progress.setToolTipText("<html>" + Lang.get("input_file") + ": " + ifilename + "<br>" + Lang.get("convert_into") + ": " + oformat + "</html>");
         loadConfig();
         this.start();
     }
-
+    /**
+     * Funkce nacte potrebne udaje pro konverzi z nastaveni
+     */
     private void loadConfig() {
-        if (oformat == "FLAC") {
+        if (oformat == null ? "FLAC" == null : oformat.equals("FLAC")) {
             try {
                 bitrate = Integer.decode(Config.get("flac_bitrate"));
             } catch (Exception e) {
@@ -74,7 +124,7 @@ public class Task extends List implements EncoderProgressListener {
             } catch (Exception e) {
                 channels = 2;
             }
-        } else if (oformat == "OGG") {
+        } else if (oformat == null ? "OGG" == null : oformat.equals("OGG")) {
             try {
                 bitrate = Integer.decode(Config.get("ogg_bitrate"));
             } catch (Exception e) {
@@ -92,7 +142,10 @@ public class Task extends List implements EncoderProgressListener {
             }
         }
     }
-
+    /**
+     * Funkce pro zahajeni nove ulohy v novem vlakne
+     * Uloha pokracuje ve zpracovani, pokud je je dostatek volnych prostredku (pocet paralelne zpracovavanych uloh je mensi nez max)
+     */
     private void start() {
         new Thread(new Runnable() {
 
@@ -101,7 +154,7 @@ public class Task extends List implements EncoderProgressListener {
                 somethingChanged();
                 File file;
                 if ((Config.get("MaxTasks") != null) && (Integer.decode(Config.get("MaxTasks")) != 0)) {
-                    while (TaskManager.numberRunningTasks() > Integer.decode(Config.get("MaxTasks"))) {
+                    while (TaskManager.numberRunningTasks() >= Integer.decode(Config.get("MaxTasks"))) {
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
@@ -132,6 +185,7 @@ public class Task extends List implements EncoderProgressListener {
                     JOptionPane.showMessageDialog(null, "Chyba vstupniho souboru","Error",JOptionPane.ERROR_MESSAGE);
                     e.printStackTrace();
                     progress.setEnabled(false);
+                    actualizeText();
                     TaskManager.decreaseRunningTasks();
                     return;
                 } catch (EncoderException e) {
@@ -150,11 +204,21 @@ public class Task extends List implements EncoderProgressListener {
                 progress.setValue(1000);
                 progress.setEnabled(false);
                 TaskManager.decreaseRunningTasks();
+                try {
+                    Thread.sleep(100); //aby nedochazelo k vyjimce z rychleho prekresleni
+                } catch (InterruptedException ex) {}
                 somethingChanged();
             }
         }).start();
     }
-
+    /**
+     * Funkce provede rekodovani souboru
+     * @param input soubor se vstupem
+     * @param output soubor s vystupem
+     * @throws IllegalArgumentException
+     * @throws InputFormatException
+     * @throws EncoderException
+     */
     private void recode(File input, File output) throws IllegalArgumentException, InputFormatException, EncoderException {
         AudioAttributes audio = new AudioAttributes();
         EncodingAttributes attrs = new EncodingAttributes();
@@ -165,7 +229,7 @@ public class Task extends List implements EncoderProgressListener {
                 attrs.setDuration(encoder.getInfo(input).getDuration()-starttime);
             } else attrs.setDuration(duration);
         }
-        if (oformat == "OGG") {
+        if (oformat == null ? "OGG" == null : oformat.equals("OGG")) {
             audio.setCodec("vorbis");
             audio.setBitRate(bitrate);
             audio.setChannels(channels);
@@ -173,7 +237,7 @@ public class Task extends List implements EncoderProgressListener {
             attrs.setFormat("ogg");
             attrs.setAudioAttributes(audio);
             encoder.encode(input, output, attrs, (EncoderProgressListener) this);
-        } else if (oformat == "FLAC") {
+        } else if (oformat == null ? "FLAC" == null : oformat.equals("FLAC")) {
             audio.setCodec("flac");
             audio.setBitRate(bitrate);
             audio.setChannels(channels);
@@ -183,22 +247,37 @@ public class Task extends List implements EncoderProgressListener {
             encoder.encode(input, output, attrs, (EncoderProgressListener) this);
         }
     }
-
+    /**
+     * Funkce nic nedela
+     * @param info
+     */
     public void sourceInfo(it.sauronsoftware.jave.MultimediaInfo info) {
     }
-
+    /**
+     * Funkce je volana po zmene progressu rekodovaci funkce
+     * - zmeni progress progress baru a vyvola jeho repaint
+     * @param permil
+     */
     public void progress(int permil) {
         progress.setValue(permil);
         somethingChanged();
     }
-
+    /**
+     * Funkce nic nedela
+     * @param message
+     */
     public void message(java.lang.String message) {
     }
-
+    /**
+     * Funkce aktializuje popisek progress baru, aby odpovidala jazykovemu nastaveni
+     */
+    public void actualizeText(){
+        progress.setToolTipText("<html>" + Lang.get("input_file") + ": " + ifilename + "<br>" + Lang.get("output_file") + ": " + ofilename + "<br>" + Lang.get("convert_into") + ": " + oformat + "</html>");
+    }
+    /**
+     * Funkce je volana, pokud se neco zmenilo - dojde k repaintu progress baru
+     */
     private void somethingChanged() {
-        try{
-            progress.setToolTipText("<html>" + Lang.get("input_file") + ": " + ifilename + "<br>" + Lang.get("output_file") + ": " + ofilename + "<br>" + Lang.get("convert_into") + ": " + oformat + "</html>");
-            MainWindow.refresh();
-        }catch(Exception e){}
+        MainWindow.refresh();
     }
 }
