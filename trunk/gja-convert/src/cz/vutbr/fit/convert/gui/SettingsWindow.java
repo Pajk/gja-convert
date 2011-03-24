@@ -124,7 +124,7 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         panel1.add(new JLabel(Lang.get("choose_language") + ":"));
         panel1.add(languages);
         panel1.add(new JLabel(Lang.get("output_filename_format") + ":"));
-        ofilenameformat.setText("<P>-<D>-<T>");
+        ofilenameformat.setText(Config.get("o_filename_format"));
         panel1.add(ofilenameformat);
         panel1.add(new JLabel(Lang.get("output_dir") + ":"));
         outputdir.setText(Config.get("output_dir"));
@@ -135,24 +135,15 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         JComponent panel2 = new JPanel(false);
         panel2.setLayout(new GridLayout(8, 2));
         panel2.add(new JLabel(Lang.get("bit_rate") + ":"));
-        try {
-            obitRateModel.setValue(Integer.decode(Config.get("ogg_bitrate")));
-        } catch (Exception e) {
-        }
+        obitRateModel.setValue(Integer.decode(Config.get("ogg_bitrate")));
         ((DefaultEditor) obitrate.getEditor()).getTextField().setEditable(false);
         panel2.add(obitrate);
         panel2.add(new JLabel(Lang.get("sampling_rate") + ":"));
-        try {
-            osampleRateModel.setValue(Integer.decode(Config.get("ogg_samplingrate")));
-        } catch (Exception e) {
-        }
+        osampleRateModel.setValue(Integer.decode(Config.get("ogg_samplingrate")));
         ((DefaultEditor) osamplerate.getEditor()).getTextField().setEditable(false);
         panel2.add(osamplerate);
         panel2.add(new JLabel(Lang.get("channels") + ":"));
-        try {
-            ochannelsModel.setValue(Integer.decode(Config.get("ogg_channels")));
-        } catch (Exception e) {
-        }
+        ochannelsModel.setValue(Integer.decode(Config.get("ogg_channels")));
         ((DefaultEditor) ochannels.getEditor()).getTextField().setEditable(false);
         panel2.add(ochannels);
         panel2.add(new JLabel());
@@ -162,24 +153,17 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         JComponent panel3 = new JPanel(false);
         panel3.setLayout(new GridLayout(8, 2));
         panel3.add(new JLabel(Lang.get("bit_rate") + ":"));
-        try {
-            fbitRateModel.setValue(Integer.decode(Config.get("flac_bitrate")));
-        } catch (Exception e) {
-        }
+        fbitRateModel.setValue(Integer.decode(Config.get("flac_bitrate")));
         ((DefaultEditor) fbitrate.getEditor()).getTextField().setEditable(false);
         panel3.add(fbitrate);
         panel3.add(new JLabel(Lang.get("sampling_rate") + ":"));
-        try {
-            fsampleRateModel.setValue(Integer.decode(Config.get("flac_samplingrate")));
-        } catch (Exception e) {
-        }
+        fsampleRateModel.setValue(Integer.decode(Config.get("flac_samplingrate")));
         ((DefaultEditor) fsamplerate.getEditor()).getTextField().setEditable(false);
         panel3.add(fsamplerate);
         panel3.add(new JLabel(Lang.get("channels") + ":"));
-        try {
-            fchannelsModel.setValue(Config.get("flac_channels"));
-        } catch (Exception e) {
-        }
+        System.out.println(Config.get("flac_channels"));
+        fchannelsModel.setValue(Config.get("flac_channels"));
+        ((DefaultEditor) fchannels.getEditor()).getTextField().setHorizontalAlignment(JTextField.RIGHT);
         ((DefaultEditor) fchannels.getEditor()).getTextField().setEditable(false);
         panel3.add(fchannels);
         panel3.add(new JLabel());
