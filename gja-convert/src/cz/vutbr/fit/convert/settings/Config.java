@@ -7,7 +7,7 @@ import java.util.prefs.*;
 
 /**
  *
- * @author pavel
+ * @author Pavel Pokorny
  */
 public class Config {
 
@@ -58,7 +58,7 @@ public class Config {
      */
     public static String get(String key) {
         // ziskani uzivatelskeho nastaveni, pokud neni k dispozici, pouzije se defaultni
-        return user_values.get(key, default_values.getProperty(key));
+        return user_values.get(key, default_values.getProperty(key, "SETTINGS MISSING"));
     }
     
     /**

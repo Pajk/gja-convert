@@ -1,8 +1,8 @@
 package cz.vutbr.fit.convert.settings;
 
-import cz.vutbr.fit.convert.settings.Config;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
@@ -43,7 +43,13 @@ public class Lang {
      * @return hledany string
      */
     public static String get(String key) {
-        return Lang.labelsBundle.getString(key);
+        String label = "MISSING_TRANSLATION";
+        try {
+            label = Lang.labelsBundle.getString(key);
+        } catch (MissingResourceException e) {
+            
+        }
+        return label;
     }
     
     /**
@@ -68,7 +74,7 @@ public class Lang {
     public static int getCurrentIndex() {
         int i=0;
         for(Locale l : Lang.supportedLocales) {
-            if (l.getDisplayLanguage()==Lang.currentLocale.getDisplayLanguage()) return i;
+            if (l.getDisplayLanguage().equals(Lang.currentLocale.getDisplayLanguage())) return i;
             i++;
         }
         return 0;
