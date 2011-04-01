@@ -154,13 +154,15 @@ public class Task extends List implements EncoderProgressListener {
                 somethingChanged();
                 File file;
                 if ((Config.get("MaxTasks") != null) && (Integer.decode(Config.get("MaxTasks")) != 0)) {
-                    while (TaskManager.numberRunningTasks() >= Integer.decode(Config.get("MaxTasks"))) {
+                    //while (TaskManager.numberRunningTasks() >= Integer.decode(Config.get("MaxTasks"))) {
+                    while (TaskManager.isBusy()) {
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
                         }
                     }
                 }
+                //TaskManager.increaseRunningTasks();
                 file = new File(ifilename);
                 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 DateFormat timeFormat = new SimpleDateFormat("HH-mm-ss-SS");
@@ -171,7 +173,6 @@ public class Task extends List implements EncoderProgressListener {
                     ofilename += Config.get("o_filename_format").replaceAll("<P>", file.getName()).replaceAll("<D>", dateFormat.format(new Date())).replaceAll("<T>", timeFormat.format(new Date()));
                 }
                 ofilename += "." + oformat.toLowerCase();
-                TaskManager.increaseRunningTasks();
                 try {
                     File ofile = new File(ofilename);
                     recode(file, ofile);
@@ -278,6 +279,11 @@ public class Task extends List implements EncoderProgressListener {
      * Funkce je volana, pokud se neco zmenilo - dojde k repaintu progress baru
      */
     private void somethingChanged() {
+        try{
         MainWindow.refresh();
+        }catch(Exception e){
+            System.out.println("Chycena vyjimka :)");
+            e.printStackTrace();
+        }
     }
 }
