@@ -1,5 +1,6 @@
 package cz.vutbr.fit.convert;
 
+import cz.vutbr.fit.convert.settings.Config;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -122,8 +123,15 @@ public final class TaskManager {
          * Funkce inkrementuje pocet aktualne bezicich tasku
          */
 	public static void increaseRunningTasks(){
-		runningTasks++;
+                runningTasks++;
 	}
+        public synchronized static boolean isBusy(){
+                if (runningTasks >= Integer.decode(Config.get("MaxTasks"))) return true;
+                else {
+                    runningTasks++;
+                    return false;
+                }
+        }
         /**
          * Funkce dekrementuje pocet aktualne bezicich tasku
          */
