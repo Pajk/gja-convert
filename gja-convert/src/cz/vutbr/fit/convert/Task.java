@@ -9,10 +9,7 @@ import cz.vutbr.fit.convert.gui.MainWindow;
 import cz.vutbr.fit.convert.settings.Config;
 import cz.vutbr.fit.convert.settings.Lang;
 import it.sauronsoftware.jave.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-
 import javax.swing.JProgressBar;
 /**
  * Task class
@@ -154,7 +151,6 @@ public class Task extends List implements EncoderProgressListener {
                 somethingChanged();
                 File file;
                 if ((Config.get("MaxTasks") != null) && (Integer.decode(Config.get("MaxTasks")) != 0)) {
-                    //while (TaskManager.numberRunningTasks() >= Integer.decode(Config.get("MaxTasks"))) {
                     while (TaskManager.isBusy()) {
                         try {
                             Thread.sleep(1000);
@@ -162,7 +158,6 @@ public class Task extends List implements EncoderProgressListener {
                         }
                     }
                 }
-                //TaskManager.increaseRunningTasks();
                 file = new File(ifilename);
                 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 DateFormat timeFormat = new SimpleDateFormat("HH-mm-ss-SS");
@@ -178,26 +173,26 @@ public class Task extends List implements EncoderProgressListener {
                     recode(file, ofile);
                 } catch (IllegalArgumentException e) {
                     JOptionPane.showMessageDialog(null, "Chyba pri vyhodnoceni parametru","Error",JOptionPane.ERROR_MESSAGE);
-                    e.printStackTrace();
+                    //e.printStackTrace();
                     progress.setEnabled(false);
                     TaskManager.decreaseRunningTasks();
                     return;
                 } catch (InputFormatException e) {
                     JOptionPane.showMessageDialog(null, "Chyba vstupniho souboru","Error",JOptionPane.ERROR_MESSAGE);
-                    e.printStackTrace();
+                    //e.printStackTrace();
                     progress.setEnabled(false);
                     actualizeText();
                     TaskManager.decreaseRunningTasks();
                     return;
                 } catch (EncoderException e) {
                     JOptionPane.showMessageDialog(null, "Chyba enkoderu","Error",JOptionPane.ERROR_MESSAGE);
-                    e.printStackTrace();
+                    //e.printStackTrace();
                     progress.setEnabled(false);
                     TaskManager.decreaseRunningTasks();
                     return;
                 }catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "Jina chyba","Error",JOptionPane.ERROR_MESSAGE);
-                    e.printStackTrace();
+                    //e.printStackTrace();
                     progress.setEnabled(false);
                     TaskManager.decreaseRunningTasks();
                     return;
@@ -282,8 +277,6 @@ public class Task extends List implements EncoderProgressListener {
         try{
         MainWindow.refresh();
         }catch(Exception e){
-            System.out.println("Chycena vyjimka :)");
-            e.printStackTrace();
         }
     }
 }
