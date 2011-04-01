@@ -28,10 +28,7 @@ public final class ProgressBars extends JPanel {
                 task.actualizeText();
 		this.add(task.progress);
             }
-            try{
-                this.revalidate();
-                this.repaint();
-            }catch(NullPointerException e){}
-            
+            this.revalidate();
+            this.repaint();
 	}
 }

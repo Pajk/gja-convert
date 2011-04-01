@@ -1,5 +1,6 @@
 package cz.vutbr.fit.convert.gui;
 
+import cz.vutbr.fit.convert.controller.DraggableLabel;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -126,6 +127,13 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         panel1.add(new JLabel(Lang.get("output_filename_format") + ":"));
         ofilenameformat.setText(Config.get("o_filename_format"));
         panel1.add(ofilenameformat);
+        panel1.add(new JLabel());
+        JComponent sub = new JPanel(false);
+        sub.setLayout(new GridLayout(1, 4));
+        sub.add(new DraggableLabel("original","<P>"));
+        sub.add(new DraggableLabel("date","<D>"));
+        sub.add(new DraggableLabel("time","<T>"));
+        panel1.add(sub);
         panel1.add(new JLabel(Lang.get("output_dir") + ":"));
         outputdir.setText(Config.get("output_dir"));
         outputdir.setSize(100, outputdir.getHeight());

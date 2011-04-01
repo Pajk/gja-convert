@@ -10,8 +10,11 @@ import javax.swing.JMenuItem;
 
 import cz.vutbr.fit.convert.TaskManager;
 import cz.vutbr.fit.convert.gui.About;
+import cz.vutbr.fit.convert.gui.MainWindow;
 import cz.vutbr.fit.convert.gui.SettingsWindow;
 import cz.vutbr.fit.convert.settings.Lang;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
 
 /**
  * Main menu class
@@ -46,26 +49,18 @@ public final class MainMenu extends JMenuBar{
 		toOGG.addActionListener(new ActionListener() {
             @SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) { 
-            	FileDialog fd=new FileDialog(new Frame(),"Vyberte soubor pro konverzi do OGG",FileDialog.LOAD);
-                /*fd.setFilenameFilter(new FilenameFilter(){
-                @Override
-                public boolean accept(File f,String name) {
-                    return f.isDirectory() || (f.isFile() &&
-                            (name.endsWith(".flac") ||
-                            name.endsWith(".ape") ||
-                            name.endsWith(".m4a") ||
-                            name.endsWith(".wv") ||
-                            name.endsWith(".ogg") ||
-                            name.endsWith(".mp3") ||
-                            name.endsWith(".mod") ||
-                            name.endsWith(".it") ||
-                            name.endsWith(".xm") ||
-                            name.endsWith(".s3m")));
-                }
-            } );*/
+            	/*FileDialog fd=new FileDialog(new Frame(),Lang.get("filedialog_header")+" OGG",FileDialog.LOAD);
             	fd.setLocation(50, 50);
             	fd.show();
-            	if (fd.getFile() != null) TaskManager.addTask(fd.getDirectory() + fd.getFile(),"OGG");
+            	if (fd.getFile() != null) TaskManager.addTask(fd.getDirectory() + fd.getFile(),"OGG");*/
+                JFileChooser chooser = new JFileChooser();
+                FileFilter filter = new ExtensionFileFilter("Music", new String[] { "CUE", "FLAC","APE","M4A",".WV","MP3","MOD","IT","XM","WAV","S3M"});
+                chooser.setFileFilter(filter);
+                chooser.setDialogTitle(Lang.get("filedialog_header")+" OGG");
+                int returnVal1 = chooser.showOpenDialog(MainWindow.ogg_frame);
+                if(returnVal1 == JFileChooser.APPROVE_OPTION) {
+                   TaskManager.addTask(chooser.getSelectedFile().getPath(),"OGG");
+                }
             }
         });
 		this.add(toOGG);
@@ -73,10 +68,14 @@ public final class MainMenu extends JMenuBar{
 		toFLAC.addActionListener(new ActionListener() {
             @SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) { 
-            	FileDialog fd=new FileDialog(new Frame(),"Vyberte soubor pro konverzi do FLAC",FileDialog.LOAD);
-            	fd.setLocation(50, 50);
-            	fd.show();
-            	if (fd.getFile() != null) TaskManager.addTask(fd.getDirectory() + fd.getFile(),"FLAC");
+            	JFileChooser chooser = new JFileChooser();
+                FileFilter filter = new ExtensionFileFilter("Music", new String[] { "CUE","OGG","APE","M4A",".WV","MP3","MOD","IT","XM","WAV","S3M"});
+                chooser.setFileFilter(filter);
+                chooser.setDialogTitle(Lang.get("filedialog_header")+" FLAC");
+                int returnVal1 = chooser.showOpenDialog(MainWindow.flac_frame);
+                if(returnVal1 == JFileChooser.APPROVE_OPTION) {
+                   TaskManager.addTask(chooser.getSelectedFile().getPath(),"FLAC");
+                }
             }
         });
 		this.add(toFLAC);
