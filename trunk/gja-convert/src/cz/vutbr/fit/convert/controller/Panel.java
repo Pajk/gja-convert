@@ -24,6 +24,7 @@ import cz.vutbr.fit.convert.settings.Config;
 import cz.vutbr.fit.convert.settings.Lang;
 import java.io.File;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.util.StringTokenizer;
 /**
  * Panel class
@@ -112,7 +113,6 @@ public class Panel extends JPanel implements DropTargetListener {
             DataFlavor[] flavors = tr.getTransferDataFlavors();
             DataFlavor linux = new DataFlavor("text/uri-list;class=java.lang.String");
             for (int i = 0; i < flavors.length; i++) {
-                //TODO System.out.println("Possible flavor: " + flavors[i].getMimeType());
                 if (flavors[i].isFlavorJavaFileListType()) {
                     dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
                     List list;
@@ -127,7 +127,6 @@ public class Panel extends JPanel implements DropTargetListener {
                     return;
                 }
                 if (flavors[i].equals(linux)) {
-                    System.out.println("Accepted linux flavor: " + flavors[i].getMimeType());
                     dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
                     String data = (String) tr.getTransferData(linux);
                     for (StringTokenizer st = new StringTokenizer(data, "\r\n"); st.hasMoreTokens();) {
@@ -135,8 +134,9 @@ public class Panel extends JPanel implements DropTargetListener {
                         if (token.startsWith("#") || token.isEmpty()) {
                             continue;
                         }
-                        System.out.println(" file - "+token);
+                        //System.out.println(new String(token.getBytes(System.getProperty("file.encoding"))));
                         File file = new File(new URI(token));
+                        
                         TaskManager.addTask(file.getAbsolutePath(), panelName);
                     }
                     dtde.dropComplete(true);

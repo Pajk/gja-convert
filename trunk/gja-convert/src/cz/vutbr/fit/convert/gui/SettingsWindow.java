@@ -161,7 +161,6 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         ((DefaultEditor) fsamplerate.getEditor()).getTextField().setEditable(false);
         panel3.add(fsamplerate);
         panel3.add(new JLabel(Lang.get("channels") + ":"));
-        System.out.println(Config.get("flac_channels"));
         fchannelsModel.setValue(Config.get("flac_channels"));
         ((DefaultEditor) fchannels.getEditor()).getTextField().setHorizontalAlignment(JTextField.RIGHT);
         ((DefaultEditor) fchannels.getEditor()).getTextField().setEditable(false);

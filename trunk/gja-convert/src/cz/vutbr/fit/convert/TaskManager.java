@@ -120,11 +120,9 @@ public final class TaskManager {
             else JOptionPane.showMessageDialog(null, "Chybny format souboru "+filename,"Error",JOptionPane.ERROR_MESSAGE);//TODO language localization
 	}
         /**
-         * Funkce inkrementuje pocet aktualne bezicich tasku
+         * Funkce otestuje, zda je dostatek volnych prostredku a pokud je, zvysi pocet zpracovavanych uloh
+         * @return true - bylo dosazeno maxima uloh, false - je volno a uloha byla zarazena mezi zpracovavane
          */
-	public static void increaseRunningTasks(){
-                runningTasks++;
-	}
         public synchronized static boolean isBusy(){
                 if (runningTasks >= Integer.decode(Config.get("MaxTasks"))) return true;
                 else {
@@ -135,7 +133,7 @@ public final class TaskManager {
         /**
          * Funkce dekrementuje pocet aktualne bezicich tasku
          */
-	public static void decreaseRunningTasks(){
+	public synchronized static void decreaseRunningTasks(){
 		runningTasks--;
 	}
         /**
