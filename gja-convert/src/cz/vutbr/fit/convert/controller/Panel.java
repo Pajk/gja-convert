@@ -3,7 +3,6 @@ package cz.vutbr.fit.convert.controller;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import java.util.List;
-import java.awt.FileDialog;
 import java.awt.Frame;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -24,8 +23,9 @@ import cz.vutbr.fit.convert.settings.Config;
 import cz.vutbr.fit.convert.settings.Lang;
 import java.io.File;
 import java.net.URI;
-import java.net.URLDecoder;
 import java.util.StringTokenizer;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
 /**
  * Panel class
  * Panel naslouchajici pro drop
@@ -40,6 +40,10 @@ public class Panel extends JPanel implements DropTargetListener {
      */
     private String panelName;
     /**
+     * Obrazek formatu s tooltipem
+     */
+    private JLabel picLabel=null;
+    /**
      * Konstruktor
      * @param path jmeno souboru se zobrazovanym obrazkem
      * @param panelNam jmeno panelu - OGG nebo FLAC
@@ -48,7 +52,6 @@ public class Panel extends JPanel implements DropTargetListener {
         @SuppressWarnings("unused")
         DropTarget dt;
         BufferedImage myPicture;
-        JLabel picLabel;
         this.panelName = panelNam;
         try {
             myPicture = ImageIO.read(Config.class.getResource(path));
@@ -56,25 +59,28 @@ public class Panel extends JPanel implements DropTargetListener {
         } catch (Exception e) {
             picLabel = new JLabel(Lang.get("file") + " " + path + " " + Lang.get("not_found"));
         }
-        //TODO language localization
-        picLabel.setToolTipText("Sem pretahnete soubor, ktery chcete konvertovat do souboru " + panelNam);
+        actualize();
         dt = new DropTarget(picLabel, this);
 
         picLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    //TODO language localization and file filter
-                    FileDialog fd = new FileDialog(new Frame(), "Vyberte soubor pro konverzi do " + panelName, FileDialog.LOAD);
-                    fd.setLocation(50, 50);
-                    fd.show();
-                    if (fd.getFile() != null) {
-                        TaskManager.addTask(fd.getDirectory() + fd.getFile(), panelName);
-                    }
+                    JFileChooser chooser = new JFileChooser();
+                FileFilter filter = new ExtensionFileFilter("Music", new String[] { "CUE", panelName,"APE","M4A",".WV","MP3","MOD","IT","XM","WAV","S3M"});
+                chooser.setFileFilter(filter);
+                chooser.setDialogTitle(Lang.get("filedialog_header")+" "+panelName);
+                int returnVal1 = chooser.showOpenDialog(new Frame());
+                if(returnVal1 == JFileChooser.APPROVE_OPTION) {
+                   TaskManager.addTask(chooser.getSelectedFile().getPath(),panelName);
+                }
                 }
             }
         });
         this.add(picLabel);
+    }
+    public void actualize(){
+        picLabel.setToolTipText(Lang.get("panel_tooltip")+" "+ panelName);
     }
     /**
      * Nedela nic

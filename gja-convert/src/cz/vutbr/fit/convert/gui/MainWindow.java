@@ -27,6 +27,14 @@ public final class MainWindow extends JFrame {
          */
 	public static MainMenu menu=new MainMenu();
         /**
+         * Panel pro drop - konverze do formatu ogg
+         */
+        public static Panel ogg_frame=new Panel("ogg.jpg","OGG");
+        /**
+         * Panel pro drop - konverze do formatu flac
+         */
+        public static Panel flac_frame=new Panel("flac.jpg","FLAC");
+        /**
          * Konstruktor
          * Pred praci s hlavnim oknem je treba ho zavolat
          */
@@ -42,11 +50,9 @@ public final class MainWindow extends JFrame {
 		this.setSize(525, 500);
 		this.setTitle("coNvert");
 		this.setJMenuBar(menu);
-		Panel ogg_frame=new Panel("ogg.jpg","OGG");
 		ogg_frame.setBackground(Color.WHITE);
 		ogg_frame.setSize(this.getSize().width/2, 30);
 		this.add(ogg_frame,BorderLayout.WEST);
-		Panel flac_frame=new Panel("flac.jpg","FLAC");
 		flac_frame.setSize(this.getSize().width/2, 30);
 		flac_frame.setBackground(Color.WHITE);
 		this.add(flac_frame,BorderLayout.EAST);
@@ -66,18 +72,24 @@ public final class MainWindow extends JFrame {
          * Funkce aktualizuje obsah hlavniho okna
          */
 	private void actualize(){
+            try{
 		JScrollPane state=new JScrollPane(panel);
 		state.setPreferredSize(new Dimension(200, 200));
 		panel.setBackground(Color.WHITE);
+                ogg_frame.actualize();
+                flac_frame.actualize();
 		this.add(state,BorderLayout.SOUTH);
-		this.invalidate();
-		this.repaint();
+            }catch(Exception e){}
 	}
         /**
          * Funkce aktualizuje obsah panelu s progress bary okna
          */
 	public static void refresh(){
-            panel.actualize();
+            try{
+                panel.actualize();
+                ogg_frame.actualize();
+                flac_frame.actualize();
+            }catch(Exception e){}
 	}
 	
 }
