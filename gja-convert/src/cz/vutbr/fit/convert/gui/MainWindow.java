@@ -41,10 +41,10 @@ public final class MainWindow extends JFrame {
 	public MainWindow(){
 		String temp=Config.get("MainWindowPosX");
 		Integer posX=0;
-		if (temp!=null) posX=Integer.decode(temp);
+		if (temp!=null && temp.compareTo("SETTINGS MISSING")!=0) posX=Integer.decode(temp);
 		temp=Config.get("MainWindowPosY");
 		Integer posY=0;
-		if (temp!=null) posY=Integer.decode(temp);
+		if (temp!=null && temp.compareTo("SETTINGS MISSING")!=0) posY=Integer.decode(temp);
 		this.setLocation(posX, posY);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setSize(525, 500);
