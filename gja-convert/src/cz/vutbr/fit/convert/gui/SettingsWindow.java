@@ -40,6 +40,10 @@ public final class SettingsWindow extends JDialog implements ActionListener {
      */
     private JTextField ofilenameformat = new JTextField();
     /**
+     * Textove pole pro zadani formatu nazvu vystupniho souboru pri cue formatu
+     */
+    private JTextField ocuefilenameformat = new JTextField();
+    /**
      * ComboBox pro vyber jazyka
      */
     private JComboBox languages = new JComboBox(Lang.getSupported());
@@ -55,7 +59,7 @@ public final class SettingsWindow extends JDialog implements ActionListener {
      */
     private JSpinner fchannels = new JSpinner(fchannelsModel);
     private SpinnerNumberModel osampleRateModel = new SpinnerNumberModel(44100, 12500, 44100, 100);
-    private SpinnerNumberModel fsampleRateModel = new SpinnerNumberModel(44100, 12500, 44100, 100);
+    private SpinnerNumberModel fsampleRateModel = new SpinnerNumberModel(44100, 1, 655350, 1);
     /**
      * Spinner pro zadani sample rate pro ogg format
      */
@@ -65,15 +69,15 @@ public final class SettingsWindow extends JDialog implements ActionListener {
      */
     private JSpinner fsamplerate = new JSpinner(fsampleRateModel);
     private SpinnerNumberModel obitRateModel = new SpinnerNumberModel(128, 32, 192, 1);
-    private SpinnerNumberModel fbitRateModel = new SpinnerNumberModel(128, 32, 192, 1);
+    //private SpinnerNumberModel fbitRateModel = new SpinnerNumberModel(128, 32, 192, 1);
     /**
      * Spinner pro zadani bit rate pro ogg format
      */
     private JSpinner obitrate = new JSpinner(obitRateModel);
-    /**
-     * Spinner pro zadani fit rate pro flac format
+    /*
+     * Spinner pro zadani bit rate pro flac format
      */
-    private JSpinner fbitrate = new JSpinner(fbitRateModel);
+    //private JSpinner fbitrate = new JSpinner(fbitRateModel);
     private SpinnerNumberModel maxtasksModel = new SpinnerNumberModel(5, 1, 100, 1);
     /**
      * Spinner pro zadani maximalniho poctu paralelne zpracovavanzch uloh
@@ -129,11 +133,43 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         panel1.add(ofilenameformat);
         panel1.add(new JLabel());
         JComponent sub = new JPanel(false);
-        sub.setLayout(new GridLayout(1, 4));
-        sub.add(new DraggableLabel("original","<P>"));
-        sub.add(new DraggableLabel("date","<D>"));
-        sub.add(new DraggableLabel("time","<T>"));
+        SpringLayout layouta=new SpringLayout();
+        sub.setLayout(layouta);
+        DraggableLabel a1=new DraggableLabel("original","<P>");
+        sub.add(a1);
+        DraggableLabel a2=new DraggableLabel("date","<D>");
+        layouta.putConstraint(SpringLayout.WEST, a2,100,SpringLayout.WEST, sub);
+        sub.add(a2);
+        DraggableLabel a3=new DraggableLabel("time","<T>");
+        layouta.putConstraint(SpringLayout.WEST, a3,150,SpringLayout.WEST, sub);
+        sub.add(a3);
         panel1.add(sub);
+        panel1.add(new JLabel(Lang.get("output_cue_filename_format") + ":"));
+        ocuefilenameformat.setText(Config.get("o_cue_filename_format"));
+        panel1.add(ocuefilenameformat);
+        
+        JComponent subcue = new JPanel(false);
+        SpringLayout layoutb=new SpringLayout();
+        subcue.setLayout(layoutb);
+        DraggableLabel b1=new DraggableLabel("number","<N>");
+        subcue.add(b1);
+        DraggableLabel b2=new DraggableLabel("performer","<P>");
+        layoutb.putConstraint(SpringLayout.WEST, b2,100,SpringLayout.WEST, subcue);
+        subcue.add(b2);
+        panel1.add(subcue);
+        JComponent subcue2 = new JPanel(false);
+        SpringLayout layoutc=new SpringLayout();
+        subcue2.setLayout(layoutc);
+        DraggableLabel b3=new DraggableLabel("title","<L>");
+        subcue2.add(b3);
+        DraggableLabel b4=new DraggableLabel("date","<D>");
+        layoutc.putConstraint(SpringLayout.WEST, b4,100,SpringLayout.WEST, subcue2);
+        subcue2.add(b4);
+        DraggableLabel b5=new DraggableLabel("time","<T>");
+        layoutc.putConstraint(SpringLayout.WEST, b5,150,SpringLayout.WEST, subcue2);
+        subcue2.add(b5);
+        panel1.add(subcue2);
+
         panel1.add(new JLabel(Lang.get("output_dir") + ":"));
         outputdir.setText(Config.get("output_dir"));
         outputdir.setSize(100, outputdir.getHeight());
@@ -159,11 +195,11 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         panel2.add(new JLabel());
         panely.addTab(Lang.get("ogg_format"), panel2);
         JComponent panel3 = new JPanel(false);
-        panel3.setLayout(new GridLayout(8, 2));
-        panel3.add(new JLabel(Lang.get("bit_rate") + ":"));
+        panel3.setLayout(new GridLayout(6, 2));
+        /*panel3.add(new JLabel(Lang.get("bit_rate") + ":"));
         fbitRateModel.setValue(Integer.decode(Config.get("flac_bitrate")));
         ((DefaultEditor) fbitrate.getEditor()).getTextField().setEditable(false);
-        panel3.add(fbitrate);
+        panel3.add(fbitrate);*/
         panel3.add(new JLabel(Lang.get("sampling_rate") + ":"));
         fsampleRateModel.setValue(Integer.decode(Config.get("flac_samplingrate")));
         ((DefaultEditor) fsamplerate.getEditor()).getTextField().setEditable(false);
@@ -229,10 +265,13 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         if (ofilenameformat.getText() == null ? "" != null : !ofilenameformat.getText().equals("")) {
             Config.set("o_filename_format", ofilenameformat.getText());
         }
+        if (ocuefilenameformat.getText() == null ? "" != null : !ocuefilenameformat.getText().equals("")) {
+            Config.set("o_cue_filename_format", ocuefilenameformat.getText());
+        }
         Config.set("ogg_samplingrate", osampleRateModel.getValue().toString());
         Config.set("flac_samplingrate", fsampleRateModel.getValue().toString());
         Config.set("ogg_bitrate", obitRateModel.getValue().toString());
-        Config.set("flac_bitrate", fbitRateModel.getValue().toString());
+        //Config.set("flac_bitrate", fbitRateModel.getValue().toString());
         Config.set("flac_channels", fchannelsModel.getValue().toString());
         Config.set("ogg_channels", ochannelsModel.getValue().toString());
     }

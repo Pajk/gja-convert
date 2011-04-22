@@ -1,5 +1,6 @@
 package cz.vutbr.fit.convert;
 
+import cz.vutbr.fit.convert.settings.Lang;
 import cz.vutbr.fit.convert.settings.Config;
 import java.io.File;
 import java.io.FileReader;
@@ -104,7 +105,7 @@ public final class TaskManager {
                 if (track_no == null ? "" != null : !track_no.equals("")){
                     tasks.add(new Task(file,mode,starttime,-1,filename(track_no,performer,title)));
                 }
-                }catch(Exception e){ JOptionPane.showMessageDialog(null, "Chybny format souboru "+filename,"Error",JOptionPane.ERROR_MESSAGE); } //TODO language localization
+                }catch(Exception e){ JOptionPane.showMessageDialog(null, Lang.get("bad_format")+" "+filename,"Error",JOptionPane.ERROR_MESSAGE); }
             } else if ((filename.endsWith(".flac") ||
                             filename.endsWith(".ape") ||
                             filename.endsWith(".m4a") ||
@@ -117,7 +118,7 @@ public final class TaskManager {
                             filename.endsWith(".wav") ||
                             filename.endsWith(".s3m")))
 		tasks.add(new Task(filename,mode));
-            else JOptionPane.showMessageDialog(null, "Chybny format souboru "+filename,"Error",JOptionPane.ERROR_MESSAGE);//TODO language localization
+            else JOptionPane.showMessageDialog(null, Lang.get("bad_format")+" "+filename,"Error",JOptionPane.ERROR_MESSAGE);
 	}
         /**
          * Funkce otestuje, zda je dostatek volnych prostredku a pokud je, zvysi pocet zpracovavanych uloh
@@ -151,6 +152,10 @@ public final class TaskManager {
          * @return nazev vystupniho souboru
          */
         private static String filename(String track_no,String performer, String title){
-           return track_no+"-"+performer+"-"+title;
+            String temp=Config.get("o_cue_filename_format");
+            temp.replaceAll("<P>", performer);
+            temp.replaceAll("<L>", title);
+            temp.replaceAll("<N>", track_no);
+            return temp;
         }
 }

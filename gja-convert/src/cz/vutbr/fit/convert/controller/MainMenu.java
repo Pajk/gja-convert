@@ -119,7 +119,7 @@ public final class MainMenu extends JMenuBar {
 
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Desktop.getDesktop().browse(new URI("http://fituska.eu"));
+                    Desktop.getDesktop().browse(new URI("http://code.google.com/p/gja-convert/wiki/usage"));
                 } catch (IOException ex) {
                 } catch (URISyntaxException ex) {
                 }
