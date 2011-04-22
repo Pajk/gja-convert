@@ -30,12 +30,12 @@ public class DraggableLabel extends JLabel {
         super(Lang.get(label));
         this.setHorizontalTextPosition(JLabel.CENTER);
         this.setVerticalTextPosition(JLabel.CENTER);
-        this.setBackground(Color.blue);
+        this.setBackground(new Color(99,184,255));
         this.setToolTipText(Lang.get(label+"_tooltip"));
         this.setOpaque(true);
         this.setForeground(Color.white);
         this.setFont(new Font("Verdana", Font.PLAIN, 11));
-        Border border = BorderFactory.createLoweredBevelBorder();
+        Border border = BorderFactory.createLineBorder(Color.black,1);
         this.setBorder(border);
         this.value=value;
         this.setTransferHandler(new TransferHandler("value"));

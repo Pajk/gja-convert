@@ -67,7 +67,7 @@ public class Panel extends JPanel implements DropTargetListener {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     JFileChooser chooser = new JFileChooser();
-                FileFilter filter = new ExtensionFileFilter("Music", new String[] { "CUE", panelName,"APE","M4A",".WV","MP3","MOD","IT","XM","WAV","S3M"});
+                FileFilter filter = new ExtensionFileFilter("Music", new String[] { "CUE", "OGG","FLAC","APE","M4A",".WV","MP3","MOD","IT","XM","WAV","S3M"});
                 chooser.setFileFilter(filter);
                 chooser.setDialogTitle(Lang.get("filedialog_header")+" "+panelName);
                 int returnVal1 = chooser.showOpenDialog(new Frame());
@@ -140,7 +140,9 @@ public class Panel extends JPanel implements DropTargetListener {
                         if (token.startsWith("#") || token.isEmpty()) {
                             continue;
                         }
+                        //TODO on linux systems - bad localization characters
                         //System.out.println(new String(token.getBytes(System.getProperty("file.encoding"))));
+                        System.out.println(token);
                         File file = new File(new URI(token));
                         
                         TaskManager.addTask(file.getAbsolutePath(), panelName);
