@@ -47,8 +47,9 @@ public final class SettingsWindow extends JDialog implements ActionListener {
      * ComboBox pro vyber jazyka
      */
     private JComboBox languages = new JComboBox(Lang.getSupported());
-    private SpinnerNumberModel ochannelsModel = new SpinnerNumberModel(2, 2, 2, 1);
-    private String[] fchannel = {"1", "2", "6"};
+    private String[] ochannel = {"1","2","3","4","5","6"};
+    private SpinnerListModel ochannelsModel = new SpinnerListModel(ochannel);
+    private String[] fchannel = {"1","2","3","4","5","6"};
     private SpinnerListModel fchannelsModel = new SpinnerListModel(fchannel);
     /**
      * Spinner pro vyber kanalu pro ogg format
@@ -58,7 +59,8 @@ public final class SettingsWindow extends JDialog implements ActionListener {
      * Spinner pro vyber kanalu pro flac format
      */
     private JSpinner fchannels = new JSpinner(fchannelsModel);
-    private SpinnerNumberModel osampleRateModel = new SpinnerNumberModel(44100, 12500, 44100, 100);
+    private String[] osample = {"8000","11025","12000","16000","22050","24000","32000","44100","48000"};
+    private SpinnerListModel osampleRateModel = new SpinnerListModel(osample);
     private SpinnerNumberModel fsampleRateModel = new SpinnerNumberModel(44100, 1, 655350, 1);
     /**
      * Spinner pro zadani sample rate pro ogg format
@@ -68,7 +70,8 @@ public final class SettingsWindow extends JDialog implements ActionListener {
      * Spinner pro zadani sample rate pro flac format
      */
     private JSpinner fsamplerate = new JSpinner(fsampleRateModel);
-    private SpinnerNumberModel obitRateModel = new SpinnerNumberModel(128, 32, 192, 1);
+    private String[] obit = {"8","16","24","32","40","48","56","64","80","96","112","128","144","160","192","224","256","320","400","480"};
+    private SpinnerListModel obitRateModel = new SpinnerListModel(obit);
     //private SpinnerNumberModel fbitRateModel = new SpinnerNumberModel(128, 32, 192, 1);
     /**
      * Spinner pro zadani bit rate pro ogg format
@@ -179,15 +182,18 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         JComponent panel2 = new JPanel(false);
         panel2.setLayout(new GridLayout(8, 2));
         panel2.add(new JLabel(Lang.get("bit_rate") + ":"));
-        obitRateModel.setValue(Integer.decode(Config.get("ogg_bitrate")));
+        obitRateModel.setValue(Config.get("ogg_bitrate"));
+        ((DefaultEditor) obitrate.getEditor()).getTextField().setHorizontalAlignment(JTextField.RIGHT);
         ((DefaultEditor) obitrate.getEditor()).getTextField().setEditable(false);
         panel2.add(obitrate);
         panel2.add(new JLabel(Lang.get("sampling_rate") + ":"));
-        osampleRateModel.setValue(Integer.decode(Config.get("ogg_samplingrate")));
+        osampleRateModel.setValue(Config.get("ogg_samplingrate"));
+        ((DefaultEditor) osamplerate.getEditor()).getTextField().setHorizontalAlignment(JTextField.RIGHT);
         ((DefaultEditor) osamplerate.getEditor()).getTextField().setEditable(false);
         panel2.add(osamplerate);
         panel2.add(new JLabel(Lang.get("channels") + ":"));
-        ochannelsModel.setValue(Integer.decode(Config.get("ogg_channels")));
+        ochannelsModel.setValue(Config.get("ogg_channels"));
+        ((DefaultEditor) ochannels.getEditor()).getTextField().setHorizontalAlignment(JTextField.RIGHT);
         ((DefaultEditor) ochannels.getEditor()).getTextField().setEditable(false);
         panel2.add(ochannels);
         panel2.add(new JLabel());
