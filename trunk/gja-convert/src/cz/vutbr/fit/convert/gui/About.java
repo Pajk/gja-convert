@@ -11,6 +11,7 @@ import cz.vutbr.fit.convert.settings.Lang;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 
@@ -37,6 +38,7 @@ public final class About extends JDialog {
 		this.setLocation(posX, posY);
 		Container content = this.getContentPane();
                 content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+                getRootPane().setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 		BufferedImage myPicture;
                 JLabel picLabel;
                 String path="logo.jpg";
@@ -47,9 +49,9 @@ public final class About extends JDialog {
                     picLabel = new JLabel(Lang.get("file") + " " + path + " " + Lang.get("not_found"));
                 }
                 this.add(picLabel);
-		JLabel about = new JLabel("<html>Drag`n`drop program pro konverzi hudebních formátů.<br>Podporována konverze do formátu OGG a FLAC.<html>");
+		JLabel about = new JLabel("<html>Drag&Drop program pro konverzi hudebních formátů.<br>Podporována konverze do formátu OGG a FLAC.</html>");
 		content.add(about);
-		JLabel credits = new JLabel("Autoři: Tomáš Ižák (xizakt00) a Pavel Pokorný (xpokor12).");
+		JLabel credits = new JLabel("<html><br>Autoři:<ul><li>Tomáš Ižák (xizakt00@stud.fit.vutbr.cz)</li><li>Pavel Pokorný (xpokor12@stud.fit.vutbr.cz)</li></ul></html>");
 		content.add(credits);
 		pack();
 		this.addWindowListener(new WindowAdapter() {
