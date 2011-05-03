@@ -23,7 +23,7 @@ public class Convert {
         Lang.init();
 
         //TODO kvuli ladeni, v ostre vyhodit
-        Config.setDefaults();
+        //Config.setDefaults();
 
         // nastaveni systemoveho vzhledu
         try {
