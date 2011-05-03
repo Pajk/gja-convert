@@ -23,6 +23,7 @@ import javax.swing.SpringLayout;
 import cz.vutbr.fit.convert.controller.MainMenu;
 import cz.vutbr.fit.convert.settings.Config;
 import cz.vutbr.fit.convert.settings.Lang;
+import javax.swing.BorderFactory;
 import javax.swing.JSpinner;
 import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.SpinnerListModel;
@@ -112,6 +113,7 @@ public final class SettingsWindow extends JDialog implements ActionListener {
             posY = Integer.decode(temp);
         }
         this.setLocation(posX, posY);
+        getRootPane().setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         Container contentPane = this.getContentPane();
         SpringLayout layout = new SpringLayout();
         contentPane.setLayout(layout);
@@ -135,6 +137,7 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         ofilenameformat.setText(Config.get("o_filename_format"));
         panel1.add(ofilenameformat);
         panel1.add(new JLabel());
+        panel1.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
         JComponent sub = new JPanel(false);
         SpringLayout layouta=new SpringLayout();
         sub.setLayout(layouta);
@@ -199,6 +202,7 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         panel2.add(new JLabel());
         panel2.add(new JLabel());
         panel2.add(new JLabel());
+        panel2.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
         panely.addTab(Lang.get("ogg_format"), panel2);
         JComponent panel3 = new JPanel(false);
         panel3.setLayout(new GridLayout(6, 2));
@@ -218,6 +222,7 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         panel3.add(new JLabel());
         panel3.add(new JLabel());
         panel3.add(new JLabel());
+        panel3.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
         panely.addTab(Lang.get("flac_format"), panel3);
         panely.setPreferredSize(new Dimension(400, 300));
         contentPane.add(panely);
