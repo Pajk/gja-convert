@@ -27,6 +27,10 @@ public class Convert {
 
         // nastaveni systemoveho vzhledu
         try {
+            // osx menu
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+            System.setProperty("com.apple.mrj.application.apple.menu.about.name", "CoNvert");
+
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ex) {
             // nepovedlo se, nevadi, vzhled bude multiplatformni
