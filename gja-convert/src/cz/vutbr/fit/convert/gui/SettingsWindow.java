@@ -23,7 +23,9 @@ import javax.swing.SpringLayout;
 import cz.vutbr.fit.convert.controller.MainMenu;
 import cz.vutbr.fit.convert.settings.Config;
 import cz.vutbr.fit.convert.settings.Lang;
+import java.awt.event.KeyEvent;
 import javax.swing.BorderFactory;
+import javax.swing.JFileChooser;
 import javax.swing.JSpinner;
 import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.SpinnerListModel;
@@ -95,6 +97,10 @@ public final class SettingsWindow extends JDialog implements ActionListener {
      * Potvrzovaci tlacitko
      */
     private JButton confirm = new JButton();
+    /**
+     * Tlacitko pro vyber vystupni slozky
+     */
+    private JButton directoryChooser=new JButton();
 
     /**
      * Konstruktor - jeho zavolanim se okno s nastavenim zobrazi
@@ -124,7 +130,9 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         JTabbedPane panely = new JTabbedPane();
         JComponent panel1 = new JPanel(false);
         panel1.setLayout(new GridLayout(8, 2));
-        panel1.add(new JLabel(Lang.get("max_threads") + ":"));
+        JLabel threads_caption=new JLabel(Lang.get("max_threads") + ":");
+        threads_caption.setToolTipText(Lang.get("max_threads"));
+        panel1.add(threads_caption);
         try {
             maxtasksModel.setValue(Integer.decode(Config.get("MaxTasks")));
         } catch (Exception e) {
@@ -144,13 +152,15 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         DraggableLabel a1=new DraggableLabel("original","<P>");
         sub.add(a1);
         DraggableLabel a2=new DraggableLabel("date","<D>");
-        layouta.putConstraint(SpringLayout.WEST, a2,100,SpringLayout.WEST, sub);
+        layouta.putConstraint(SpringLayout.WEST, a2,90,SpringLayout.WEST, sub);
         sub.add(a2);
         DraggableLabel a3=new DraggableLabel("time","<T>");
-        layouta.putConstraint(SpringLayout.WEST, a3,150,SpringLayout.WEST, sub);
+        layouta.putConstraint(SpringLayout.WEST, a3,140,SpringLayout.WEST, sub);
         sub.add(a3);
         panel1.add(sub);
-        panel1.add(new JLabel(Lang.get("output_cue_filename_format") + ":"));
+        JLabel cue_file_format_caption=new JLabel(Lang.get("output_cue_filename_format") + ":");
+        cue_file_format_caption.setToolTipText(Lang.get("output_cue_filename_format"));
+        panel1.add(cue_file_format_caption);
         ocuefilenameformat.setText(Config.get("o_cue_filename_format"));
         panel1.add(ocuefilenameformat);
         
@@ -158,9 +168,10 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         SpringLayout layoutb=new SpringLayout();
         subcue.setLayout(layoutb);
         DraggableLabel b1=new DraggableLabel("number","<N>");
+        layoutb.putConstraint(SpringLayout.WEST, b1,30,SpringLayout.WEST, subcue);
         subcue.add(b1);
         DraggableLabel b2=new DraggableLabel("performer","<P>");
-        layoutb.putConstraint(SpringLayout.WEST, b2,100,SpringLayout.WEST, subcue);
+        layoutb.putConstraint(SpringLayout.WEST, b2,110,SpringLayout.WEST, subcue);
         subcue.add(b2);
         panel1.add(subcue);
         JComponent subcue2 = new JPanel(false);
@@ -169,18 +180,25 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         DraggableLabel b3=new DraggableLabel("title","<L>");
         subcue2.add(b3);
         DraggableLabel b4=new DraggableLabel("date","<D>");
-        layoutc.putConstraint(SpringLayout.WEST, b4,100,SpringLayout.WEST, subcue2);
+        layoutc.putConstraint(SpringLayout.WEST, b4,90,SpringLayout.WEST, subcue2);
         subcue2.add(b4);
         DraggableLabel b5=new DraggableLabel("time","<T>");
-        layoutc.putConstraint(SpringLayout.WEST, b5,150,SpringLayout.WEST, subcue2);
+        layoutc.putConstraint(SpringLayout.WEST, b5,140,SpringLayout.WEST, subcue2);
         subcue2.add(b5);
         panel1.add(subcue2);
-
-        panel1.add(new JLabel(Lang.get("output_dir") + ":"));
+        JLabel output_caption=new JLabel(Lang.get("output_dir") + ":");
+        output_caption.setToolTipText(Lang.get("output_dir"));
+        panel1.add(output_caption);
+        outputdir.setEditable(false);
         outputdir.setText(Config.get("output_dir"));
+        outputdir.setFont(new Font("Arial",Font.PLAIN,10));
         outputdir.setSize(100, outputdir.getHeight());
         panel1.add(outputdir);
         panel1.add(new JLabel());
+        directoryChooser.setText(Lang.get("odir_button"));
+        directoryChooser.setMnemonic(KeyEvent.VK_O);
+        directoryChooser.addActionListener(this);
+        panel1.add(directoryChooser);
         panely.addTab(Lang.get("general"), panel1);
         JComponent panel2 = new JPanel(false);
         panel2.setLayout(new GridLayout(8, 2));
@@ -228,6 +246,7 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         contentPane.add(panely);
         confirm.setName("OK");
         confirm.setText(Lang.get("ok"));
+        confirm.setMnemonic(KeyEvent.VK_ENTER);
         confirm.addActionListener(this);
         contentPane.add(confirm);
         layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, headline, 0, SpringLayout.HORIZONTAL_CENTER, contentPane);
@@ -258,6 +277,15 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         if (e.getSource() == confirm) {
             save();
             this.dispose();
+        } else if (e.getSource()==directoryChooser){
+            System.out.println("Sem tu");
+            JFileChooser chooser = new JFileChooser();
+            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            chooser.setDialogTitle(Lang.get("odirfiledialog_header"));
+            int returnVal1 = chooser.showOpenDialog(this);
+            if (returnVal1 == JFileChooser.APPROVE_OPTION) {
+                outputdir.setText(chooser.getSelectedFile().getPath());
+            }
         }
     }
     /**

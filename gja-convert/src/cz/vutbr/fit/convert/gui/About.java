@@ -51,7 +51,7 @@ public final class About extends JDialog {
                 this.add(picLabel);
 		JLabel about = new JLabel("<html>Drag&Drop program pro konverzi hudebních formátů.<br>Podporována konverze do formátu OGG a FLAC.</html>");
 		content.add(about);
-		JLabel credits = new JLabel("<html><br>Autoři:<ul><li>Tomáš Ižák (xizakt00@stud.fit.vutbr.cz)</li><li>Pavel Pokorný (xpokor12@stud.fit.vutbr.cz)</li></ul></html>");
+		JLabel credits = new JLabel("<html><br>Autoři:<ul><li>Tomáš Ižák (xizakt00@stud.fit.vutbr.cz)</li><li>Pavel Pokorný (xpokor12@stud.fit.vutbr.cz)</li></ul><br>Projekt do předmětu GJA na FIT VUT Brno</html>");
 		content.add(credits);
 		pack();
 		this.addWindowListener(new WindowAdapter() {
