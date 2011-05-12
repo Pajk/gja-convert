@@ -63,6 +63,5 @@ public final class About extends JDialog {
 		      });
 		this.setResizable(false);
 		this.setModal(true);
-		setVisible(true);
 	}
 }

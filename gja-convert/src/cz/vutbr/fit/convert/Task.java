@@ -115,11 +115,12 @@ public class Task extends List implements EncoderProgressListener {
             } catch (Exception e) {
                 volume = 256;
             }
-            try {
-                bitrate = Integer.decode(Config.get("flac_bitrate"));
-            } catch (Exception e) {
-                bitrate = 128000;
-            }
+//          u flacu se bitrate nenastavuje
+//            try {
+//                bitrate = Integer.decode(Config.get("flac_bitrate"));
+//            } catch (Exception e) {
+//                bitrate = 128000;
+//            }
             try {
                 samplingrate = Integer.decode(Config.get("flac_samplingrate"));
             } catch (Exception e) {
@@ -137,20 +138,18 @@ public class Task extends List implements EncoderProgressListener {
                 volume = 256;
             }
             try {
-                bitrate = Integer.decode(Config.get("ogg_bitrate"));
+                // u ogg se nastavuje kvalita (0-?), vyuzijem vsak promennou
+                // bitrate, maji k sobe blizko
+                bitrate = Integer.decode(Config.get("ogg_quality"));
             } catch (Exception e) {
-                bitrate = 128000;
+                bitrate = 50;
             }
             try {
                 samplingrate = Integer.decode(Config.get("ogg_samplingrate"));
             } catch (Exception e) {
                 samplingrate = 44100;
             }
-            try {
-                channels = Integer.decode(Config.get("ogg_channels"));
-            } catch (Exception e) {
-                channels = 2;
-            }
+            channels = 2;
         }
     }
     /**
@@ -244,7 +243,7 @@ public class Task extends List implements EncoderProgressListener {
         }
         if (oformat == null ? "OGG" == null : oformat.equals("OGG")) {
             audio.setCodec("vorbis");
-            audio.setBitRate(bitrate);
+            audio.setQuality(bitrate);
             audio.setChannels(channels);
             audio.setSamplingRate(samplingrate);
             audio.setVolume(volume);
@@ -253,7 +252,7 @@ public class Task extends List implements EncoderProgressListener {
             encoder.encode(input, output, attrs, (EncoderProgressListener) this);
         } else if (oformat == null ? "FLAC" == null : oformat.equals("FLAC")) {
             audio.setCodec("flac");
-            audio.setBitRate(bitrate);
+            //audio.setBitRate(bitrate);
             audio.setChannels(channels);
             audio.setSamplingRate(samplingrate);
             audio.setVolume(volume);

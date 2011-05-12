@@ -1,12 +1,11 @@
 package cz.vutbr.fit.convert.controller;
 
+import cz.vutbr.fit.convert.Convert;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -61,6 +60,12 @@ public final class MainMenu extends JMenuBar {
      */
     private static JMenuItem about = new JMenuItem();
 
+
+    private static JMenuItem quit = new JMenuItem();
+
+    private static SettingsWindow settingsWindow = new SettingsWindow();
+    private static About aboutDialog = new About();
+
     /**
      * Konstruktor
      */
@@ -105,12 +110,23 @@ public final class MainMenu extends JMenuBar {
             }
         });
         convert.add(toFLAC);
+
+        quit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.ALT_MASK));
+        quit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+        convert.add(quit);
+
         //settings.setMnemonic(KeyEvent.VK_S);
+        settings.setName("settings_window_menuitem");
+        settingsWindow.setName("settings_window_dialog");
         settings.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.ALT_MASK));
         settings.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                new SettingsWindow();
+                settingsWindow.setVisible(true);
             }
         });
         others.add(settings);
@@ -131,7 +147,7 @@ public final class MainMenu extends JMenuBar {
         about.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                new About();
+                aboutDialog.setVisible(true);
             }
         });
         others.add(about);
@@ -144,6 +160,7 @@ public final class MainMenu extends JMenuBar {
      * Funkce nastavi texty tlacitek dle jazykove lokalizace
      */
     public static void setNames() {
+        quit.setText(Lang.get("program_exit"));
         toOGG.setText(Lang.get("ogg_convert"));
         toFLAC.setText(Lang.get("flac_convert"));
         settings.setText(Lang.get("settings"));
