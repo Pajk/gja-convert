@@ -62,6 +62,10 @@ public class Task extends List implements EncoderProgressListener {
      */
     private int channels;
     /**
+     * Zvolena hlasitost - 256=bez zmeny, <256 snizeni hlasitosti, >256 zvyseni hlasitosti
+     */
+    private int volume;
+    /**
      * Konstruktor - vytvori novou ulohu a spusti ji v novem vlakne
      * @param filename cesta a nazev vstupniho souboru
      * @param mode typ konverze - ogg nebo flac
@@ -107,6 +111,11 @@ public class Task extends List implements EncoderProgressListener {
     private void loadConfig() {
         if (oformat == null ? "FLAC" == null : oformat.equals("FLAC")) {
             try {
+                volume = Integer.decode(Config.get("flac_volume"));
+            } catch (Exception e) {
+                volume = 256;
+            }
+            try {
                 bitrate = Integer.decode(Config.get("flac_bitrate"));
             } catch (Exception e) {
                 bitrate = 128000;
@@ -122,6 +131,11 @@ public class Task extends List implements EncoderProgressListener {
                 channels = 2;
             }
         } else if (oformat == null ? "OGG" == null : oformat.equals("OGG")) {
+            try {
+                volume = Integer.decode(Config.get("ogg_volume"));
+            } catch (Exception e) {
+                volume = 256;
+            }
             try {
                 bitrate = Integer.decode(Config.get("ogg_bitrate"));
             } catch (Exception e) {
@@ -219,17 +233,21 @@ public class Task extends List implements EncoderProgressListener {
         AudioAttributes audio = new AudioAttributes();
         EncodingAttributes attrs = new EncodingAttributes();
         Encoder encoder = new Encoder();
+        float delka=encoder.getInfo(input).getDuration();
         if (cut){
             attrs.setOffset(starttime);
             if (duration<0) {
-                attrs.setDuration(encoder.getInfo(input).getDuration()-starttime);
+                attrs.setDuration(delka-starttime);
             } else attrs.setDuration(duration);
+        } else {
+            attrs.setDuration(delka);
         }
         if (oformat == null ? "OGG" == null : oformat.equals("OGG")) {
             audio.setCodec("vorbis");
             audio.setBitRate(bitrate);
             audio.setChannels(channels);
             audio.setSamplingRate(samplingrate);
+            audio.setVolume(volume);
             attrs.setFormat("ogg");
             attrs.setAudioAttributes(audio);
             encoder.encode(input, output, attrs, (EncoderProgressListener) this);
@@ -238,6 +256,7 @@ public class Task extends List implements EncoderProgressListener {
             audio.setBitRate(bitrate);
             audio.setChannels(channels);
             audio.setSamplingRate(samplingrate);
+            audio.setVolume(volume);
             attrs.setFormat("flac");
             attrs.setAudioAttributes(audio);
             encoder.encode(input, output, attrs, (EncoderProgressListener) this);
