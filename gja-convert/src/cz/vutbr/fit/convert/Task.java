@@ -111,7 +111,7 @@ public class Task extends List implements EncoderProgressListener {
     private void loadConfig() {
         if (oformat == null ? "FLAC" == null : oformat.equals("FLAC")) {
             try {
-                volume = Integer.decode(Config.get("flac_volume"));
+                volume = (int) (Integer.decode(Config.get("flac_volume")) * 2.56);
             } catch (Exception e) {
                 volume = 256;
             }
@@ -132,7 +132,7 @@ public class Task extends List implements EncoderProgressListener {
             }
         } else if (oformat == null ? "OGG" == null : oformat.equals("OGG")) {
             try {
-                volume = Integer.decode(Config.get("ogg_volume"));
+                volume = (int) (Integer.decode(Config.get("ogg_volume")) * 2.56);
             } catch (Exception e) {
                 volume = 256;
             }
@@ -240,7 +240,7 @@ public class Task extends List implements EncoderProgressListener {
                 attrs.setDuration(delka-starttime);
             } else attrs.setDuration(duration);
         } else {
-            attrs.setDuration(delka);
+            //attrs.setDuration(delka);
         }
         if (oformat == null ? "OGG" == null : oformat.equals("OGG")) {
             audio.setCodec("vorbis");

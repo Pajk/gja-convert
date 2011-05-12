@@ -26,17 +26,20 @@ import cz.vutbr.fit.convert.settings.Lang;
 import java.awt.event.KeyEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
+import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 /**
  * Settings window class
  * okno s nastavenim aplikace
  * coNvert project for GJA 2010/2011 - FIT VUT Brno
  * @author xizakt00
  */
-public final class SettingsWindow extends JDialog implements ActionListener {
+public final class SettingsWindow extends JDialog implements ActionListener, ChangeListener {
     private static final long serialVersionUID = -3491161084404651198L;
     /**
      * Textove pole pro zadani formatu nazvu vystupniho souboru
@@ -50,14 +53,8 @@ public final class SettingsWindow extends JDialog implements ActionListener {
      * ComboBox pro vyber jazyka
      */
     private JComboBox languages = new JComboBox(Lang.getSupported());
-    private String[] ochannel = {"1","2","3","4","5","6"};
-    private SpinnerListModel ochannelsModel = new SpinnerListModel(ochannel);
     private String[] fchannel = {"1","2","3","4","5","6"};
     private SpinnerListModel fchannelsModel = new SpinnerListModel(fchannel);
-    /**
-     * Spinner pro vyber kanalu pro ogg format
-     */
-    private JSpinner ochannels = new JSpinner(ochannelsModel);
     /**
      * Spinner pro vyber kanalu pro flac format
      */
@@ -80,10 +77,6 @@ public final class SettingsWindow extends JDialog implements ActionListener {
      * Spinner pro zadani bit rate pro ogg format
      */
     private JSpinner obitrate = new JSpinner(obitRateModel);
-    /*
-     * Spinner pro zadani bit rate pro flac format
-     */
-    //private JSpinner fbitrate = new JSpinner(fbitRateModel);
     private SpinnerNumberModel maxtasksModel = new SpinnerNumberModel(5, 1, 100, 1);
     /**
      * Spinner pro zadani maximalniho poctu paralelne zpracovavanzch uloh
@@ -101,11 +94,15 @@ public final class SettingsWindow extends JDialog implements ActionListener {
      * Tlacitko pro vyber vystupni slozky
      */
     private JButton directoryChooser=new JButton();
+    private JSlider volume_ogg=new JSlider();
+    private JSlider volume_flac=new JSlider();
+    private JLabel volume_ogg_l=new JLabel();
+    private JLabel volume_flac_l=new JLabel();
 
     /**
      * Konstruktor - jeho zavolanim se okno s nastavenim zobrazi
      */
-    public SettingsWindow() {
+    public SettingsWindow(){
         this.setTitle(Lang.get("settings"));
         languages.setSelectedIndex(Lang.getCurrentIndex());
         String temp = Config.get("SettingsWindowPosX");
@@ -212,35 +209,39 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         ((DefaultEditor) osamplerate.getEditor()).getTextField().setHorizontalAlignment(JTextField.RIGHT);
         ((DefaultEditor) osamplerate.getEditor()).getTextField().setEditable(false);
         panel2.add(osamplerate);
-        //panel2.add(new JLabel(Lang.get("channels") + ":"));
-        //ochannelsModel.setValue(Config.get("ogg_channels"));
-        //((DefaultEditor) ochannels.getEditor()).getTextField().setHorizontalAlignment(JTextField.RIGHT);
-        //((DefaultEditor) ochannels.getEditor()).getTextField().setEditable(false);
-        //panel2.add(ochannels);
+        panel2.add(new JLabel(Lang.get("volume") + ":"));
+        volume_ogg.setMinimum(0);
+        volume_ogg.setMaximum(200);
+        volume_ogg.setValue(Integer.decode(Config.get("ogg_volume")));
+        volume_ogg.addChangeListener(this);
+        panel2.add(volume_ogg);
         panel2.add(new JLabel());
-        panel2.add(new JLabel());
-        panel2.add(new JLabel());
-        panel2.add(new JLabel());
+        volume_ogg_l.setHorizontalTextPosition(JLabel.RIGHT);
+        volume_ogg_l.setText(Integer.toString(volume_ogg.getValue())+" %");
+        panel2.add(volume_ogg_l);
         panel2.add(new JLabel());
         panel2.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
         panely.addTab(Lang.get("ogg_format"), panel2);
         JComponent panel3 = new JPanel(false);
         panel3.setLayout(new GridLayout(6, 2));
-        /*panel3.add(new JLabel(Lang.get("bit_rate") + ":"));
-        fbitRateModel.setValue(Integer.decode(Config.get("flac_bitrate")));
-        ((DefaultEditor) fbitrate.getEditor()).getTextField().setEditable(false);
-        panel3.add(fbitrate);*/
         panel3.add(new JLabel(Lang.get("sampling_rate") + ":"));
         fsampleRateModel.setValue(Integer.decode(Config.get("flac_samplingrate")));
-        //((DefaultEditor) fsamplerate.getEditor()).getTextField().setEditable(false);
         panel3.add(fsamplerate);
         panel3.add(new JLabel(Lang.get("channels") + ":"));
         fchannelsModel.setValue(Config.get("flac_channels"));
         ((DefaultEditor) fchannels.getEditor()).getTextField().setHorizontalAlignment(JTextField.RIGHT);
         ((DefaultEditor) fchannels.getEditor()).getTextField().setEditable(false);
         panel3.add(fchannels);
+        panel3.add(new JLabel(Lang.get("volume") + ":"));
+        volume_flac.setMinimum(0);
+        volume_flac.setMaximum(200);
+        volume_flac.setValue(Integer.decode(Config.get("flac_volume")));
+        volume_flac.addChangeListener(this);
+        panel3.add(volume_flac);
         panel3.add(new JLabel());
-        panel3.add(new JLabel());
+        volume_flac_l.setHorizontalTextPosition(JLabel.RIGHT);
+        volume_flac_l.setText(Integer.toString(volume_flac.getValue())+" %");
+        panel3.add(volume_flac_l);
         panel3.add(new JLabel());
         panel3.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
         panely.addTab(Lang.get("flac_format"), panel3);
@@ -312,8 +313,17 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         Config.set("ogg_samplingrate", osampleRateModel.getValue().toString());
         Config.set("flac_samplingrate", fsampleRateModel.getValue().toString());
         Config.set("ogg_bitrate", obitRateModel.getValue().toString());
-        //Config.set("flac_bitrate", fbitRateModel.getValue().toString());
         Config.set("flac_channels", fchannelsModel.getValue().toString());
-        Config.set("ogg_channels", ochannelsModel.getValue().toString());
+        Config.set("flac_volume", Integer.toString(volume_flac.getValue()));
+        Config.set("ogg_volume", Integer.toString(volume_ogg.getValue()));
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent ce){
+      if (ce.getSource()==volume_flac){
+          volume_flac_l.setText(Integer.toString(volume_flac.getValue())+" %");
+      }else if (ce.getSource()==volume_ogg){
+          volume_ogg_l.setText(Integer.toString(volume_ogg.getValue())+" %");
+      }
     }
 }
