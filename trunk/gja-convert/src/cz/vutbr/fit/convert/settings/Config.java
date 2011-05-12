@@ -3,6 +3,8 @@ package cz.vutbr.fit.convert.settings;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.prefs.*;
 
 /**
@@ -46,8 +48,12 @@ public class Config {
      * 
      * @throws BackingStoreException 
      */
-    public static void save() throws BackingStoreException {
-        user_values.flush();
+    public static void save() {
+        try {
+            user_values.flush();
+        } catch (BackingStoreException ex) {
+            Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**
@@ -69,6 +75,7 @@ public class Config {
      */
     public static void set(String key, String value) {
         user_values.put(key, value);
+        save();
     }
     
     /**

@@ -13,6 +13,8 @@ import javax.swing.UIManager;
  */
 public class Convert {
 
+    public static MainWindow application;
+
     /**
      * Konstruktor - nacte se konfigurace a prislusne jazykove popisky, pak hlavni okno aplikace
      * @param args
@@ -36,6 +38,6 @@ public class Convert {
             // nepovedlo se, nevadi, vzhled bude multiplatformni
         }
 
-        new MainWindow();
+        application = new MainWindow();
     }
 }
