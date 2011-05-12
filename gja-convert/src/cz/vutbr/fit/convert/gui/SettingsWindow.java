@@ -212,11 +212,13 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         ((DefaultEditor) osamplerate.getEditor()).getTextField().setHorizontalAlignment(JTextField.RIGHT);
         ((DefaultEditor) osamplerate.getEditor()).getTextField().setEditable(false);
         panel2.add(osamplerate);
-        panel2.add(new JLabel(Lang.get("channels") + ":"));
-        ochannelsModel.setValue(Config.get("ogg_channels"));
-        ((DefaultEditor) ochannels.getEditor()).getTextField().setHorizontalAlignment(JTextField.RIGHT);
-        ((DefaultEditor) ochannels.getEditor()).getTextField().setEditable(false);
-        panel2.add(ochannels);
+        //panel2.add(new JLabel(Lang.get("channels") + ":"));
+        //ochannelsModel.setValue(Config.get("ogg_channels"));
+        //((DefaultEditor) ochannels.getEditor()).getTextField().setHorizontalAlignment(JTextField.RIGHT);
+        //((DefaultEditor) ochannels.getEditor()).getTextField().setEditable(false);
+        //panel2.add(ochannels);
+        panel2.add(new JLabel());
+        panel2.add(new JLabel());
         panel2.add(new JLabel());
         panel2.add(new JLabel());
         panel2.add(new JLabel());
@@ -230,7 +232,7 @@ public final class SettingsWindow extends JDialog implements ActionListener {
         panel3.add(fbitrate);*/
         panel3.add(new JLabel(Lang.get("sampling_rate") + ":"));
         fsampleRateModel.setValue(Integer.decode(Config.get("flac_samplingrate")));
-        ((DefaultEditor) fsamplerate.getEditor()).getTextField().setEditable(false);
+        //((DefaultEditor) fsamplerate.getEditor()).getTextField().setEditable(false);
         panel3.add(fsamplerate);
         panel3.add(new JLabel(Lang.get("channels") + ":"));
         fchannelsModel.setValue(Config.get("flac_channels"));
