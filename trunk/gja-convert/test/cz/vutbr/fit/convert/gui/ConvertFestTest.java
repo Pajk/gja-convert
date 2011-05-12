@@ -1,12 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ *
  */
-
 package cz.vutbr.fit.convert.gui;
 
 
 //Requires Fest library:
+import java.io.File;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.junit.BeforeClass;
@@ -17,6 +16,7 @@ import cz.vutbr.fit.convert.settings.Lang;
 
 //Requires JUnit 4.1 library:
 import org.fest.swing.fixture.DialogFixture;
+import org.fest.swing.fixture.JFileChooserFixture;
 import org.fest.swing.fixture.JSpinnerFixture;
 import org.fest.swing.fixture.JTabbedPaneFixture;
 import org.junit.Test;
@@ -26,10 +26,10 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author ppo
+ * @author Pavel Pokorny xpokor12@stud.fit.vutbr.cz
  */
 
-public class SettingsFestTest {
+public class ConvertFestTest {
 
     private FrameFixture window;
     private DialogFixture settings_dialog;
@@ -51,12 +51,6 @@ public class SettingsFestTest {
         // zobrazeni aplikace
         window = new FrameFixture(dialog);
         window.show();
-        
-        // zobrazeni nastaveni
-        window.menuItem("settings_window_menuitem").click();
-        settings_dialog = window.dialog("settings_window_dialog");
-
-        settings_tabbed_pane = settings_dialog.tabbedPane("settings_tabbed_pane");
     }
     
     @BeforeClass
@@ -65,10 +59,21 @@ public class SettingsFestTest {
     }
 
     /**
+     * Otevre nastaveni programu
+     */
+    private void openSettings() {
+        window.menuItem("settings_window_menuitem").click();
+        settings_dialog = window.dialog("settings_window_dialog");
+
+        settings_tabbed_pane = settings_dialog.tabbedPane("settings_tabbed_pane");
+    }
+
+    /**
      * Otestuje, zda se uklada nastaveni poctu max vlaken.
      */
     @Test
     public void shouldSaveMaxTasksSettings() {
+        openSettings();
         
         JSpinnerFixture maxtask = settings_dialog.spinner("max_tasks_spinner");
         Integer old_maxtask_val = Integer.decode(Config.get("MaxTasks"));
@@ -91,9 +96,13 @@ public class SettingsFestTest {
         assertEquals(old_maxtask_val-3, Integer.decode(Config.get("MaxTasks")).intValue() );
     }
 
+    /**
+     * test, zda se uklada ogg nastaveni
+     */
     @Test
     public void shouldSaveOggSettings() {
-
+        openSettings();
+        
         settings_tabbed_pane.selectTab(Lang.get("ogg_format"));
 
         JSpinnerFixture samplerate = settings_dialog.spinner("ogg_samplerate_spinner");
@@ -136,6 +145,20 @@ public class SettingsFestTest {
 
         assertEquals(old_quality_val.intValue(), Integer.decode(Config.get("ogg_quality")).intValue());
         assertEquals(44100, Integer.decode(Config.get("ogg_samplingrate")).intValue());
+    }
+
+    /**
+     * test spatneho formatu souboru
+     */
+    @Test
+    public void shouldRecognizeWrongFile() {
+        //window.menuItem("file_menuitem").click();
+        window.menuItem("file_ogg_menuitem").click();
+        JFileChooserFixture fc = window.fileChooser("file_chooser");
+        fc.selectFile(new File("/etc/hosts"));
+        fc.approve();
+        window.optionPane().requireErrorMessage()
+                           .requireMessage(Lang.get("bad_format")+" /etc/hosts");
     }
         
     @After

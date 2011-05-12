@@ -72,6 +72,8 @@ public final class MainMenu extends JMenuBar {
     public MainMenu() {
         setNames();
 
+        convert.setName("file_menu");
+
         //toOGG.setMnemonic(KeyEvent.VK_O);
         toOGG.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.ALT_MASK));
         toOGG.addActionListener(new ActionListener() {
@@ -83,6 +85,7 @@ public final class MainMenu extends JMenuBar {
                 fd.show();
                 if (fd.getFile() != null) TaskManager.addTask(fd.getDirectory() + fd.getFile(),"OGG");*/
                 JFileChooser chooser = new JFileChooser();
+                chooser.setName("file_chooser");
                 FileFilter filter = new ExtensionFileFilter("Music", new String[]{"CUE", "FLAC", "APE", "M4A", ".WV", "MP3", "MOD", "IT", "XM", "WAV", "S3M"});
                 chooser.setFileFilter(filter);
                 chooser.setDialogTitle(Lang.get("filedialog_header") + " OGG");
@@ -92,6 +95,7 @@ public final class MainMenu extends JMenuBar {
                 }
             }
         });
+        toOGG.setName("file_ogg_menuitem");
         convert.add(toOGG);
         //toFLAC.setMnemonic(KeyEvent.VK_F);
         toFLAC.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, ActionEvent.ALT_MASK));
