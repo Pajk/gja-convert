@@ -72,7 +72,7 @@ public final class SettingsWindow extends JDialog implements ActionListener, Cha
      * Spinner pro zadani sample rate pro flac format
      */
     private JSpinner fsamplerate = new JSpinner(fsampleRateModel);
-    private SpinnerNumberModel oqualityModel = new SpinnerNumberModel(Integer.valueOf(Config.get("ogg_quality")).intValue(), 0, 1000, 1);
+    private SpinnerNumberModel oqualityModel = new SpinnerNumberModel(50, 0, 1000, 1);
     /**
      * Spinner pro zadani bit rate pro ogg format
      */
@@ -94,17 +94,27 @@ public final class SettingsWindow extends JDialog implements ActionListener, Cha
      * Tlacitko pro vyber vystupni slozky
      */
     private JButton directoryChooser = new JButton();
+    private JButton defaults = new JButton();
     private JSlider volume_ogg = new JSlider();
     private JSlider volume_flac = new JSlider();
     private JLabel volume_ogg_l = new JLabel();
     private JLabel volume_flac_l = new JLabel();
+    private JLabel threads_caption = new JLabel();
+    private JLabel cl = new JLabel();
+    private JLabel cue_file_format_caption = new JLabel();
+    private JLabel fvolume = new JLabel();
+    private JLabel output_caption = new JLabel();
+    private JLabel fchannels_l=new JLabel();
+    private JLabel fsamplerate_l=new JLabel();
+    private JLabel osamplerate_l=new JLabel();
+    private JLabel oquality_l=new JLabel();
+    private JLabel ovolume_l=new JLabel();
 
     /**
      * Konstruktor - jeho zavolanim se okno s nastavenim zobrazi
      */
     public SettingsWindow() {
-        this.setTitle(Lang.get("settings"));
-        languages.setSelectedIndex(Lang.getCurrentIndex());
+        reload();
         String temp = Config.get("SettingsWindowPosX");
         Integer posX = 0;
         if (temp != null) {
@@ -120,34 +130,18 @@ public final class SettingsWindow extends JDialog implements ActionListener, Cha
         Container contentPane = this.getContentPane();
         SpringLayout layout = new SpringLayout();
         contentPane.setLayout(layout);
-//        JLabel headline = new JLabel("coNvert");
-//        headline.setFont(new Font("Courier New", Font.BOLD, 20));
-//        headline.setHorizontalAlignment(JLabel.CENTER);
-//        contentPane.add(headline);
         JTabbedPane panely = new JTabbedPane();
         panely.setName("settings_tabbed_pane");
         JComponent panel1 = new JPanel(false);
         panel1.setLayout(new GridLayout(8, 2));
-
-        // max pocet pracujicich vlaken
-        JLabel threads_caption = new JLabel(Lang.get("max_threads") + ":");
-        threads_caption.setToolTipText(Lang.get("max_threads"));
         panel1.add(threads_caption);
-        try {
-            maxtasksModel.setValue(Integer.decode(Config.get("MaxTasks")));
-        } catch (Exception e) {
-            maxtasksModel.setValue(4);
-        }
         maxtasks.setName("max_tasks_spinner");
         ((DefaultEditor) maxtasks.getEditor()).getTextField().setEditable(false);
         panel1.add(maxtasks);
-
-        JLabel cl = new JLabel(Lang.get("choose_language") + ":");
         cl.setName("choose_language_label");
         panel1.add(cl);
         panel1.add(languages);
         panel1.add(new JLabel(Lang.get("output_filename_format") + ":"));
-        ofilenameformat.setText(Config.get("o_filename_format"));
         panel1.add(ofilenameformat);
         panel1.add(new JLabel());
         panel1.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
@@ -163,10 +157,7 @@ public final class SettingsWindow extends JDialog implements ActionListener, Cha
         layouta.putConstraint(SpringLayout.WEST, a3, 140, SpringLayout.WEST, sub);
         sub.add(a3);
         panel1.add(sub);
-        JLabel cue_file_format_caption = new JLabel(Lang.get("output_cue_filename_format") + ":");
-        cue_file_format_caption.setToolTipText(Lang.get("output_cue_filename_format"));
         panel1.add(cue_file_format_caption);
-        ocuefilenameformat.setText(Config.get("o_cue_filename_format"));
         panel1.add(ocuefilenameformat);
 
         JComponent subcue = new JPanel(false);
@@ -191,43 +182,38 @@ public final class SettingsWindow extends JDialog implements ActionListener, Cha
         layoutc.putConstraint(SpringLayout.WEST, b5, 140, SpringLayout.WEST, subcue2);
         subcue2.add(b5);
         panel1.add(subcue2);
-        JLabel output_caption = new JLabel(Lang.get("output_dir") + ":");
-        output_caption.setToolTipText(Lang.get("output_dir"));
         panel1.add(output_caption);
         outputdir.setEditable(false);
-        outputdir.setText(Config.get("output_dir"));
         outputdir.setFont(new Font("Arial", Font.PLAIN, 10));
         outputdir.setSize(100, outputdir.getHeight());
         panel1.add(outputdir);
         panel1.add(new JLabel());
-        directoryChooser.setText(Lang.get("odir_button"));
         directoryChooser.setMnemonic(KeyEvent.VK_O);
         directoryChooser.addActionListener(this);
         panel1.add(directoryChooser);
         panely.addTab(Lang.get("general"), panel1);
         JComponent panel2 = new JPanel(false);
-        panel2.setLayout(new GridLayout(8, 2));
-        panel2.add(new JLabel(Lang.get("ogg_quality") + ":"));
+        panel2.setLayout(new GridLayout(6, 2));
+        panel2.add(oquality_l);
         //obitRateModel.setValue(Config.get("ogg_quality"));
         ((DefaultEditor) obitrate.getEditor()).getTextField().setHorizontalAlignment(JTextField.RIGHT);
         ((DefaultEditor) obitrate.getEditor()).getTextField().setEditable(false);
         obitrate.setName("ogg_quality_spinner");
         panel2.add(obitrate);
-        panel2.add(new JLabel(Lang.get("sampling_rate") + ":"));
-        osampleRateModel.setValue(Config.get("ogg_samplingrate"));
+        panel2.add(osamplerate_l);
         ((DefaultEditor) osamplerate.getEditor()).getTextField().setHorizontalAlignment(JTextField.RIGHT);
         ((DefaultEditor) osamplerate.getEditor()).getTextField().setEditable(false);
         osamplerate.setName("ogg_samplerate_spinner");
         panel2.add(osamplerate);
-        panel2.add(new JLabel(Lang.get("volume") + ":"));
+        panel2.add(new JLabel());
+        panel2.add(new JLabel());
+        panel2.add(ovolume_l);
         volume_ogg.setMinimum(0);
         volume_ogg.setMaximum(200);
-        volume_ogg.setValue(Integer.decode(Config.get("ogg_volume")));
         volume_ogg.addChangeListener(this);
         panel2.add(volume_ogg);
         panel2.add(new JLabel());
         volume_ogg_l.setHorizontalTextPosition(JLabel.RIGHT);
-        volume_ogg_l.setText(Integer.toString(volume_ogg.getValue()) + " %");
         panel2.add(volume_ogg_l);
         panel2.add(new JLabel());
         panel2.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
@@ -235,40 +221,44 @@ public final class SettingsWindow extends JDialog implements ActionListener, Cha
         panely.addTab(Lang.get("ogg_format"), panel2);
         JComponent panel3 = new JPanel(false);
         panel3.setLayout(new GridLayout(6, 2));
-        panel3.add(new JLabel(Lang.get("sampling_rate") + ":"));
-        fsampleRateModel.setValue(Integer.decode(Config.get("flac_samplingrate")));
+        panel3.add(fsamplerate_l);
         panel3.add(fsamplerate);
-        panel3.add(new JLabel(Lang.get("channels") + ":"));
-        fchannelsModel.setValue(Config.get("flac_channels"));
+        ((DefaultEditor) fsamplerate.getEditor()).getTextField().setHorizontalAlignment(JTextField.RIGHT);
+        ((DefaultEditor) fsamplerate.getEditor()).getTextField().setEditable(true);
+        panel3.add(fchannels_l);
         ((DefaultEditor) fchannels.getEditor()).getTextField().setHorizontalAlignment(JTextField.RIGHT);
         ((DefaultEditor) fchannels.getEditor()).getTextField().setEditable(false);
         panel3.add(fchannels);
-        panel3.add(new JLabel(Lang.get("volume") + ":"));
+        panel3.add(new JLabel());
+        panel3.add(new JLabel());
+        panel3.add(fvolume);
         volume_flac.setMinimum(0);
         volume_flac.setMaximum(200);
-        volume_flac.setValue(Integer.decode(Config.get("flac_volume")));
         volume_flac.addChangeListener(this);
         panel3.add(volume_flac);
         panel3.add(new JLabel());
         volume_flac_l.setHorizontalTextPosition(JLabel.RIGHT);
-        volume_flac_l.setText(Integer.toString(volume_flac.getValue()) + " %");
+        //volume_flac_l.setText(Integer.toString(volume_flac.getValue()) + " %");
         panel3.add(volume_flac_l);
         panel3.add(new JLabel());
         panel3.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         panely.addTab(Lang.get("flac_format"), panel3);
         panely.setPreferredSize(new Dimension(400, 300));
         contentPane.add(panely);
+        defaults.setName("resetButton");
+        defaults.setMnemonic(KeyEvent.VK_D);
+        defaults.addActionListener(this);
+        contentPane.add(defaults);
         confirm.setName("okButton");
-        confirm.setText(Lang.get("ok"));
         confirm.setMnemonic(KeyEvent.VK_ENTER);
         confirm.addActionListener(this);
         contentPane.add(confirm);
-//        layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, headline, 0, SpringLayout.HORIZONTAL_CENTER, contentPane);
-//        layout.putConstraint(SpringLayout.NORTH, headline, 5, SpringLayout.NORTH, contentPane);
         layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, panely, 0, SpringLayout.HORIZONTAL_CENTER, contentPane);
         layout.putConstraint(SpringLayout.NORTH, panely, 0, SpringLayout.NORTH, contentPane);
         layout.putConstraint(SpringLayout.EAST, confirm, 0, SpringLayout.EAST, contentPane);
         layout.putConstraint(SpringLayout.SOUTH, confirm, 0, SpringLayout.SOUTH, contentPane);
+        layout.putConstraint(SpringLayout.WEST, defaults, 0, SpringLayout.WEST, contentPane);
+        layout.putConstraint(SpringLayout.SOUTH, defaults, 0, SpringLayout.SOUTH, contentPane);
         this.addWindowListener(new WindowAdapter() {
 
             @Override
@@ -294,9 +284,9 @@ public final class SettingsWindow extends JDialog implements ActionListener, Cha
         if (e.getSource() == confirm) {
             save();
             setVisible(false);
+            reload();
             //this.dispose();
         } else if (e.getSource() == directoryChooser) {
-            System.out.println("Sem tu");
             JFileChooser chooser = new JFileChooser();
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             chooser.setDialogTitle(Lang.get("odirfiledialog_header"));
@@ -304,7 +294,47 @@ public final class SettingsWindow extends JDialog implements ActionListener, Cha
             if (returnVal1 == JFileChooser.APPROVE_OPTION) {
                 outputdir.setText(chooser.getSelectedFile().getPath());
             }
+        } else if (e.getSource() == defaults) {
+            Config.setDefaults();
+            reload();
         }
+    }
+
+    private void reload(){
+        this.setTitle(Lang.get("settings"));
+        languages.setSelectedIndex(Lang.getCurrentIndex());
+        threads_caption.setText(Lang.get("max_threads")+":");
+        threads_caption.setToolTipText(Lang.get("max_threads"));
+        try {
+            maxtasksModel.setValue(Integer.decode(Config.get("MaxTasks")));
+        } catch (Exception e) {
+            maxtasksModel.setValue(4);
+        }
+        cl.setText(Lang.get("choose_language")+":");
+        cl.setToolTipText(Lang.get("choose_language"));
+        cue_file_format_caption.setText(Lang.get("output_cue_filename_format")+":");
+        cue_file_format_caption.setToolTipText(Lang.get("output_cue_filename_format"));
+        ocuefilenameformat.setText(Config.get("o_cue_filename_format"));
+        confirm.setText(Lang.get("ok"));
+        defaults.setText(Lang.get("defaults"));
+        volume_flac.setValue(Integer.decode(Config.get("flac_volume")));
+        fvolume.setText(Lang.get("volume") + " (%):");
+        fchannelsModel.setValue(Config.get("flac_channels"));
+        outputdir.setText(Config.get("output_dir"));
+        output_caption = new JLabel(Lang.get("output_dir") + ":");
+        output_caption.setToolTipText(Lang.get("output_dir"));
+        fchannels_l.setText(Lang.get("channels") + ":");
+        fsamplerate_l.setText(Lang.get("sampling_rate") + ":");
+        fsampleRateModel.setValue(Integer.decode(Config.get("flac_samplingrate")));
+        volume_ogg.setValue(Integer.decode(Config.get("ogg_volume")));
+        //volume_ogg_l.setText(Integer.toString(volume_ogg.getValue()) + " %");
+        osamplerate_l.setText(Lang.get("sampling_rate") + ":");
+        directoryChooser.setText(Lang.get("odir_button"));
+        oqualityModel.setValue(Integer.valueOf(Config.get("ogg_quality")).intValue());
+        ofilenameformat.setText(Config.get("o_filename_format"));
+        oquality_l.setText(Lang.get("ogg_quality") + ":");
+        ovolume_l.setText(Lang.get("volume") + " (%):");
+        osampleRateModel.setValue(Config.get("ogg_samplingrate"));
     }
 
     /**
@@ -337,9 +367,9 @@ public final class SettingsWindow extends JDialog implements ActionListener, Cha
     @Override
     public void stateChanged(ChangeEvent ce) {
         if (ce.getSource() == volume_flac) {
-            volume_flac_l.setText(Integer.toString(volume_flac.getValue()) + " %");
+            //volume_flac_l.setText(Integer.toString(volume_flac.getValue()) + " %");
         } else if (ce.getSource() == volume_ogg) {
-            volume_ogg_l.setText(Integer.toString(volume_ogg.getValue()) + " %");
+            //volume_ogg_l.setText(Integer.toString(volume_ogg.getValue()) + " %");
         }
     }
 }
