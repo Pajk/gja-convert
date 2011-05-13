@@ -12,7 +12,9 @@ Convert je napsaný v programovací jazyce Java a pro převod hudebních formát
 
 Hlavní okno programu je navrženo pro co nejjednodušší použití. Je rozděleno na dvě části, v horní jsou zobrazeny ikony formátů OGG a FLAC, na které je možno přetáhnout soubor nebo více souborů skladeb, které chce uživatel převést. Pokud jsou přetaženy na symbol OGG, převedou se do formátu OGG, pokud na symbol FLAC, převedou se do formátu FLAC.
 Ve spodní části okna se pak zobrazují jednotlivé soubory a stav jejich převodu, popřípadě chybová hláška, pokud se něco při převodu nepovedlo.
-Soubory je možné vybrat i standardně pomocí dialogu výběru souboru, k tomu je možné se dostat přes menu Konvertovat do -> OGG nebo FLAC.
+Soubory je možné vybrat i standardně pomocí dialogu výběru souboru, k tomu je možné se dostat přes menu Soubor -> Konvertovat do OGG nebo FLAC. Další možnost, jak otevřít dialog, je poklepat na ikonu formátu, do kterého chce uživatel skladby převádět.
+Po úspěšném převodu je možné otevřít skladbu v defaultně nastaveném hudebním přehrávači dvojitým poklepáním na ukazatel průběhu převodu.
+Pro pohodlnější ovládání programu jsou podporovány klávesové zkratky.
 
 <img src="http://www.stud.fit.vutbr.cz/~xpokor12/img/convert-3.png" width="400px" />
 <img src="http://www.stud.fit.vutbr.cz/~xpokor12/img/convert-4.png" width="400px" />
@@ -20,7 +22,7 @@ Soubory je možné vybrat i standardně pomocí dialogu výběru souboru, k tomu
 
 == Nastavení ==
 
-K dialogu nastavení je možné se dostat přes menu Nápověda -> Nastavení nebo klávesou zkratku alt+s. Dialog je rozdělen na tři sekce.
+K dialogu nastavení je možné se dostat přes menu Nápověda -> Nastavení nebo klávesou zkratku alt+s. Dialog je rozdělen na tři sekce. V případě nejastností je k dispozici nápověda, která se zobrazí po najetí na název nastavované hodnoty.
 
 === Obecné ===
 
