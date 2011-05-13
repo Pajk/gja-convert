@@ -153,9 +153,9 @@ public final class TaskManager {
          */
         private static String filename(String track_no,String performer, String title){
             String temp=Config.get("o_cue_filename_format");
-            temp.replaceAll("<P>", performer);
-            temp.replaceAll("<L>", title);
-            temp.replaceAll("<N>", track_no);
+            temp = temp.replaceAll("<P>", performer);
+            temp = temp.replaceAll("<L>", title);
+            temp = temp.replaceAll("<N>", track_no);
             return temp;
         }
 }

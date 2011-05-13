@@ -8,8 +8,13 @@ import java.util.logging.Logger;
 import java.util.prefs.*;
 
 /**
+ * Ukládání a načítání uživatelského nastavení programu.
+ * Před prvním použitím je nutné zavolat metodu init. Použití je jednoduché,
+ * metodou get lze získat uloženou hodnotu nastavení podle zadaného klíče
+ * a metdou set lze nastavit hodnotu novou. Je možné nastavit defaultní hodnoty
+ * metodou setDefaults.
  *
- * @author Pavel Pokorny
+ * @author Pavel Pokorný
  */
 public class Config {
 

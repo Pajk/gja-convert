@@ -1,7 +1,9 @@
 package cz.vutbr.fit.convert;
 
 import java.awt.List;
+import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,6 +11,10 @@ import cz.vutbr.fit.convert.gui.MainWindow;
 import cz.vutbr.fit.convert.settings.Config;
 import cz.vutbr.fit.convert.settings.Lang;
 import it.sauronsoftware.jave.*;
+import java.awt.Desktop;
+import java.awt.event.MouseListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 /**
@@ -260,6 +266,28 @@ public class Task extends List implements EncoderProgressListener {
             attrs.setAudioAttributes(audio);
             encoder.encode(input, output, attrs, (EncoderProgressListener) this);
         }
+
+        progress.addMouseListener(new MouseListener() {
+
+            // spusteni pisnicky v defaultnim prehravaci po dvojkliku
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    try {
+                        File f = new File(ofilename);
+                        if(f.canRead()) {
+                            Desktop.getDesktop().open(f);
+                        }
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        Logger.getLogger(Task.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+            public void mousePressed(MouseEvent e) {}
+            public void mouseReleased(MouseEvent e) {}
+            public void mouseEntered(MouseEvent e) {}
+            public void mouseExited(MouseEvent e) {}
+        });
     }
     /**
      * Funkce nic nedela

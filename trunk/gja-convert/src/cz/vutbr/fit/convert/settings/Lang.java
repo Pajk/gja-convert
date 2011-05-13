@@ -99,5 +99,4 @@ public class Lang {
         
         Lang.init();
     }
-
 }
