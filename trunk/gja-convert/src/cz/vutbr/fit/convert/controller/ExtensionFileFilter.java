@@ -1,8 +1,12 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Convert
+ * Program pro prevod skladeb do formatu ogg a flac
+ * Projekt do GJA na FIT VUT 2010/2011
+ *
+ * Autori:
+ * Tomas Izak <izakt00@stud.fit.vutbr.cz>
+ * Pavel Pokorny <xpokor12@stud.fit.vutbr.cz>
  */
-
 package cz.vutbr.fit.convert.controller;
 
 import java.io.File;
@@ -11,6 +15,7 @@ import javax.swing.filechooser.FileFilter;
 
 /**
  * Trida pro pouziti file filtru
+ * Filtruje soubory, ktere je mozne vybrat v dialogu vyberu souboru.
  * 
  */
 class ExtensionFileFilter extends FileFilter{

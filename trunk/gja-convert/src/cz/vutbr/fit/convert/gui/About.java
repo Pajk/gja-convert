@@ -1,3 +1,12 @@
+/**
+ * Convert
+ * Program pro prevod skladeb do formatu ogg a flac
+ * Projekt do GJA na FIT VUT 2010/2011
+ *
+ * Autori:
+ * Tomas Izak <izakt00@stud.fit.vutbr.cz>
+ * Pavel Pokorny <xpokor12@stud.fit.vutbr.cz>
+ */
 package cz.vutbr.fit.convert.gui;
 import java.awt.Container;
 import java.awt.event.WindowAdapter;
@@ -16,9 +25,8 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 
 /**
- * About window class
- * Jednoduche okno "O programu"
- * coNvert project for GJA 2010/2011 - FIT VUT Brno
+ * Okno "O programu"
+ *
  * @author xizakt00
  */
 public final class About extends JDialog {
