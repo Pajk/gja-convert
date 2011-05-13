@@ -38,6 +38,7 @@ Zde je možné nastavit parametry pro převod souboru do OGG.
 
  * [http://en.wikipedia.org/wiki/Vorbis#Technical_details Kvalita] - nejnižší je 0 a horní hranice v podstatě není. Doporučená kvalita je 40-50, což zhruba odpovídá 128-160kbps.
  * [http://en.wikipedia.org/wiki/Sampling_rate Sampling rate]
+ * Hlasitost
 
 
 === Formát FLAC ===
@@ -46,6 +47,7 @@ Nastavení pro převod skladeb do formátu FLAC, obdobně jako u OGG.
  
  * Sampling rate
  * Počet kanálů - mono (1), stereo (2), 2.1 (3), 4.0 (4), 4.1 (5), 5.1 (6)
+ * Hlasitost
 
 <img src="http://www.stud.fit.vutbr.cz/~xpokor12/img/convert-5.png" width="400px" />
 <img src="http://www.stud.fit.vutbr.cz/~xpokor12/img/convert-6.png" width="400px" />
