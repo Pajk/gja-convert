@@ -15,6 +15,7 @@ import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
 
 import java.io.IOException;
 
@@ -104,11 +105,14 @@ public final class MainMenu extends JMenuBar {
 
                 chooser.setFileFilter(filter);
                 chooser.setDialogTitle(Lang.get("filedialog_header") + " OGG");
-
+                chooser.setMultiSelectionEnabled(true);
                 int returnVal1 = chooser.showOpenDialog(MainWindow.ogg_frame);
 
                 if (returnVal1 == JFileChooser.APPROVE_OPTION) {
-                    TaskManager.addTask(chooser.getSelectedFile().getPath(), "OGG");
+                    File[] files=chooser.getSelectedFiles();
+                        for (File temp:files){
+                            TaskManager.addTask(temp.getPath(), "OGG");
+                        }
                 }
             }
         });
@@ -124,14 +128,17 @@ public final class MainMenu extends JMenuBar {
                 FileFilter   filter  = new ExtensionFileFilter("Music", new String[] {
                     "CUE", "OGG", "APE", "M4A", ".WV", "MP3", "MOD", "IT", "XM", "WAV", "S3M"
                 });
-
+                chooser.setMultiSelectionEnabled(true);
                 chooser.setFileFilter(filter);
                 chooser.setDialogTitle(Lang.get("filedialog_header") + " FLAC");
 
                 int returnVal1 = chooser.showOpenDialog(MainWindow.flac_frame);
 
                 if (returnVal1 == JFileChooser.APPROVE_OPTION) {
-                    TaskManager.addTask(chooser.getSelectedFile().getPath(), "FLAC");
+                    File[] files=chooser.getSelectedFiles();
+                        for (File temp:files){
+                            TaskManager.addTask(temp.getPath(), "FLAC");
+                        }
                 }
             }
         });
