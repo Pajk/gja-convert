@@ -80,6 +80,7 @@ public class Panel extends JPanel implements DropTargetListener {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     JFileChooser chooser = new JFileChooser();
+                    chooser.setMultiSelectionEnabled(true);
                     FileFilter   filter  = new ExtensionFileFilter("Music", new String[] {
                         "CUE", "OGG", "FLAC", "APE", "M4A", ".WV", "MP3", "MOD", "IT", "XM", "WAV", "S3M"
                     });
@@ -90,7 +91,10 @@ public class Panel extends JPanel implements DropTargetListener {
                     int returnVal1 = chooser.showOpenDialog(new Frame());
 
                     if (returnVal1 == JFileChooser.APPROVE_OPTION) {
-                        TaskManager.addTask(chooser.getSelectedFile().getPath(), panelName);
+                        File[] files=chooser.getSelectedFiles();
+                        for (File temp:files){
+                            TaskManager.addTask(temp.getPath(), panelName);
+                        }
                     }
                 }
             }
