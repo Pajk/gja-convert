@@ -1,3 +1,12 @@
+/**
+ * Convert
+ * Program pro prevod skladeb do formatu ogg a flac
+ * Projekt do GJA na FIT VUT 2010/2011
+ *
+ * Autori:
+ * Tomas Izak <izakt00@stud.fit.vutbr.cz>
+ * Pavel Pokorny <xpokor12@stud.fit.vutbr.cz>
+ */
 package cz.vutbr.fit.convert.controller;
 
 import javax.swing.BoxLayout;
@@ -5,9 +14,8 @@ import javax.swing.JPanel;
 import cz.vutbr.fit.convert.Task;
 import cz.vutbr.fit.convert.TaskManager;
 /**
- * ProgressBars class
- * Okenko s progress bary
- * coNvert project for GJA 2010/2011 - FIT VUT Brno
+ * Sekce obsahujici progress bary
+ * Panel s ukazately prubehu prevodu, kazdy panel predstavuje jednu ulohu.
  * @author xizakt00
  */
 public final class ProgressBars extends JPanel {

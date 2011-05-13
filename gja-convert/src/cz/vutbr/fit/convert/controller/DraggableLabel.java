@@ -1,15 +1,15 @@
-
-/*
-* To change this template, choose Tools | Templates
-* and open the template in the editor.
+/**
+ * Convert
+ * Program pro prevod skladeb do formatu ogg a flac
+ * Projekt do GJA na FIT VUT 2010/2011
+ *
+ * Autori:
+ * Tomas Izak <izakt00@stud.fit.vutbr.cz>
+ * Pavel Pokorny <xpokor12@stud.fit.vutbr.cz>
  */
 package cz.vutbr.fit.convert.controller;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import cz.vutbr.fit.convert.settings.Lang;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.awt.Color;
 import java.awt.Font;
@@ -24,9 +24,10 @@ import javax.swing.TransferHandler;
 import javax.swing.border.Border;
 
 /**
- * DraggableLabel class
- * Label, ktery je pripraven na drag
- * coNvert project for GJA 2010/2011 - FIT VUT Brno
+ * Label podporujici DragAndDrop
+ * Popisek, ktery je mozne pretahovat, je pouzit v nastaveni programu pro
+ * sestaveni nazvu novych souboru.
+ *
  * @author xizakt00
  */
 public class DraggableLabel extends JLabel {

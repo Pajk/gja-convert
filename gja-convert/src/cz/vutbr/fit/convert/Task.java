@@ -1,6 +1,14 @@
+/**
+ * Convert
+ * Program pro prevod skladeb do formatu ogg a flac
+ * Projekt do GJA na FIT VUT 2010/2011
+ *
+ * Autori:
+ * Tomas Izak <izakt00@stud.fit.vutbr.cz>
+ * Pavel Pokorny <xpokor12@stud.fit.vutbr.cz>
+ */
 package cz.vutbr.fit.convert;
 
-import java.awt.List;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
@@ -18,12 +26,14 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 /**
- * Task class
- * Trida reprezentujici jednu ulohu
- * coNvert project for GJA 2010/2011 - FIT VUT Brno
+ * Trida reprezentujici jednu spustenou ulohu
+ * Stara se o prevod souboru, obsahuje kod, ktery vykonava vlakno,
+ * ve kterem prevod probiha. Obsahuje progressbar, ktery v aplikaci
+ * reprezentuje dany prevod.
+ * 
  * @author xizakt00
  */
-public class Task extends List implements EncoderProgressListener {
+public class Task implements EncoderProgressListener {
     private static final long serialVersionUID = 3619958613264215820L;
     /**
      * Priznak indikujici, ze ma dojit k orezani souboru

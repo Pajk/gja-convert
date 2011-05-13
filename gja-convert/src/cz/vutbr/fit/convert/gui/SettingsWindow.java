@@ -1,3 +1,12 @@
+/**
+ * Convert
+ * Program pro prevod skladeb do formatu ogg a flac
+ * Projekt do GJA na FIT VUT 2010/2011
+ *
+ * Autori:
+ * Tomas Izak <izakt00@stud.fit.vutbr.cz>
+ * Pavel Pokorny <xpokor12@stud.fit.vutbr.cz>
+ */
 package cz.vutbr.fit.convert.gui;
 
 import cz.vutbr.fit.convert.controller.DraggableLabel;
@@ -35,9 +44,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 /**
- * Settings window class
- * okno s nastavenim aplikace
- * coNvert project for GJA 2010/2011 - FIT VUT Brno
+ * Okno s nastavenim aplikace a parameteru prevodu
+ *
  * @author xizakt00
  */
 public final class SettingsWindow extends JDialog implements ActionListener, ChangeListener {
@@ -300,6 +308,9 @@ public final class SettingsWindow extends JDialog implements ActionListener, Cha
         }
     }
 
+    /**
+     * Nacteni ulozenych hodnot parametru prevodu a jazykove mutace
+     */
     private void reload(){
         this.setTitle(Lang.get("settings"));
         languages.setSelectedIndex(Lang.getCurrentIndex());

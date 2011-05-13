@@ -1,3 +1,12 @@
+/**
+ * Convert
+ * Program pro prevod skladeb do formatu ogg a flac
+ * Projekt do GJA na FIT VUT 2010/2011
+ *
+ * Autori:
+ * Tomas Izak <izakt00@stud.fit.vutbr.cz>
+ * Pavel Pokorny <xpokor12@stud.fit.vutbr.cz>
+ */
 package cz.vutbr.fit.convert.controller;
 
 //~--- non-JDK imports --------------------------------------------------------
@@ -37,9 +46,10 @@ import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
 /**
- * Panel class
- * Panel naslouchajici pro drop
- * coNvert project for GJA 2010/2011 - FIT VUT Brno
+ * Panel naslouchajici na drop hudebniho souboru
+ * Kazdy panel predstavuje urcity format (ogg,flac). Po dvojkliku zobrazi
+ * dialog otevreni souboru a podporuje pretahnuti souboru na panel pomoci Drag&Drop.
+ * 
  * @author xizakt00
  */
 public class Panel extends JPanel implements DropTargetListener {
