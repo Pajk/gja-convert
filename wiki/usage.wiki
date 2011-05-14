@@ -1,3 +1,4 @@
+#summary Popis aplikace a návod k použití
 #labels usage,help
 = CONVERT =
 
